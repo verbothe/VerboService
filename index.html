@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Programação do culto</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f4f2ec;color:#1c1f1d}
+body.s{background:transparent}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;background:#fff;border-bottom:1px solid #d6d2c6;position:sticky;top:0;z-index:2}
+main{max-width:720px;margin:0 auto;padding:16px}
+.box{max-width:360px;margin:12vh auto;padding:0 16px}
+h1{font-size:22px;margin:0 0 8px}
+label{display:block;font-size:14px;font-weight:600;margin:12px 0 4px}
+input,select{width:100%;font:inherit;padding:10px;border:1px solid #d6d2c6;border-radius:6px;background:#fff;color:inherit}
+button{font:inherit;font-weight:600;padding:10px 14px;border-radius:6px;border:1px solid #2d6a4f;background:#2d6a4f;color:#fff;cursor:pointer}
+button.g{background:#fff;color:#2d6a4f}
+button.r{border-color:#b3261e;color:#b3261e;background:#fff}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.row>input,.row>select{flex:1;min-width:110px;width:auto}
+.err{color:#b3261e;font-size:14px;min-height:20px}
+.vz{color:#5b5f5c}
+.l{list-style:none;padding:0;margin:14px 0}
+.l li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px;background:#fff;border:1px solid #d6d2c6;border-radius:8px;margin-bottom:8px;cursor:pointer}
+.l small{display:block;color:#5b5f5c;margin-top:2px}
+.it{display:grid;grid-template-columns:52px 1fr 70px auto;gap:6px;align-items:center;margin-bottom:8px}
+.it .t{font-variant-numeric:tabular-nums;color:#5b5f5c;font-size:14px}
+.it .b{display:flex;gap:4px}
+.it button{padding:8px 10px}
+.tot{color:#5b5f5c;font-size:14px}
+.cur{font-size:26px;font-weight:700;margin:6px 0 0}
+.nxt{color:#5b5f5c;margin:2px 0 8px}
+.cd{font-size:64px;font-weight:700;font-variant-numeric:tabular-nums;color:#2d6a4f;line-height:1.1}
+.cd.neg{color:#b3261e}
+.pl{list-style:none;padding:0;margin:14px 0}
+.pl li{padding:9px 12px;border:1px solid #d6d2c6;border-radius:6px;background:#fff;margin-bottom:6px;display:flex;justify-content:space-between}
+.pl li.on{border-color:#2d6a4f;background:#e6f1ea;font-weight:700}
+.ctl{display:grid;grid-template-columns:1fr 2fr 1fr;gap:8px;margin:10px 0}
+.ctl button{padding:16px 10px;font-size:17px}
+#lk{font-size:12px;word-break:break-all;color:#444;margin-top:8px}
+#out{position:fixed;inset:0;display:none;background:transparent}
+#out iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent}
+#lt{position:absolute;left:3vw;right:3vw;bottom:3vh;padding:1.2vw 1.8vw;border-radius:.6vw;display:flex;align-items:center;gap:1.8vw;font-size:3.4vw;line-height:1.1}
+#lt.claro{background:rgba(255,255,255,.94);color:#161816}
+#lt.escuro{background:rgba(18,20,19,.92);color:#fff}
+#lt.topo{bottom:auto;top:3vh}
+#lt .h{font-weight:300;font-size:1.6em;white-space:nowrap}
+#lt .h b{font-weight:700}
+#lt .c{font-variant-numeric:tabular-nums;font-weight:700;padding:.15em .5em;border-radius:.25em;background:#2d6a4f;color:#fff;white-space:nowrap}
+#lt .c.neg{background:#b3261e}
+#lt .n{font-size:.8em;opacity:.85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="out"><iframe id="fr" allow="autoplay"></iframe><div id="lt"><div class="h" id="hora"></div><div class="c" id="cr"></div><div class="n" id="nx"></div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const SB_URL='https://lnbunuppttmcrqhxalpp.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxuYnVudXBwdHRtY3JxaHhhbHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyNjI4NDAsImV4cCI6MjEwNzgzODg0MH0.RXTVze45uxDJBn8j9KcuKrgDtPB72nbSGIxanb3bCi8';
+const sb=supabase.createClient(SB_URL,SB_KEY);
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=s=>{const a=Math.abs(Math.round(s));return Math.floor(a/60)+':'+String(a%60).padStart(2,'0')};
+const hm=m=>{m=Math.round(m)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')};
+const toMin=t=>{const [h,m]=t.split(':');return +h*60+ +m};
+const P=new URLSearchParams(location.search);
+let timer;
+
+if(P.get('saida'))saida(P.get('saida'));else admin();
+
+async function admin(){
+  const {data:{session}}=await sb.auth.getSession();
+  session?lista():login();
+}
+function login(msg=''){
+  clearInterval(timer);
+  $('#app').innerHTML=`<div class="box"><h1>Entrar</h1><p class="err">${esc(msg)}</p><label>E-mail<input id="em" type="email" autocomplete="username"></label><label>Senha<input id="pw" type="password" autocomplete="current-password"></label><div class="row"><button id="go">Entrar</button></div></div>`;
+  $('#go').onclick=async()=>{
+    const {error}=await sb.auth.signInWithPassword({email:$('#em').value.trim(),password:$('#pw').value});
+    error?login(({'Invalid login credentials':'E-mail ou senha incorretos.','Email not confirmed':'E-mail ainda não confirmado no Supabase.'})[error.message]||error.message):admin();
+  };
+}
+async function lista(){
+  clearInterval(timer);
+  const {data}=await sb.from('cultos').select('*').order('data',{ascending:false});
+  $('#app').innerHTML=`<header><b>Cultos</b><button class="g" id="sair">Sair</button></header><main>
+  <form id="nf" class="row"><input id="nn" placeholder="Nome do culto" required><input id="nd" type="date" required><input id="nh" type="time" value="18:00" required><button>Criar culto</button></form>
+  <ul class="l">${(data||[]).map(c=>`<li data-id="${c.id}"><span><b>${esc(c.nome)}</b><small>${c.data.split('-').reverse().join('/')} às ${c.hora_inicio.slice(0,5)}</small></span><button class="r" data-a="del">Excluir</button></li>`).join('')||'<li class="vz">Nenhum culto ainda. Crie o primeiro acima.</li>'}</ul></main>`;
+  $('#sair').onclick=async()=>{await sb.auth.signOut();login()};
+  $('#nf').onsubmit=async e=>{e.preventDefault();const {data:n}=await sb.from('cultos').insert({nome:$('#nn').value.trim(),data:$('#nd').value,hora_inicio:$('#nh').value}).select().single();if(n)culto(n.id)};
+  document.querySelector('.l').onclick=async e=>{
+    const li=e.target.closest('li[data-id]');if(!li)return;
+    if(e.target.dataset.a==='del'){if(confirm('Excluir este culto e toda a programação?')){await sb.from('cultos').delete().eq('id',li.dataset.id);lista()}return}
+    culto(li.dataset.id);
+  };
+}
+async function culto(id){
+  clearInterval(timer);
+  const [a,b]=await Promise.all([sb.from('cultos').select('*').eq('id',id).single(),sb.from('itens').select('*').eq('culto_id',id).order('ordem')]);
+  const c=a.data,it=b.data||[];
+  let m=toMin(c.hora_inicio.slice(0,5));
+  const rows=it.map(i=>{const t=hm(m);m+=Number(i.minutos);return `<div class="it" data-id="${i.id}"><span class="t">${t}</span><input class="nm" value="${esc(i.nome)}"><input class="mn" type="number" min="0" step="0.5" value="${i.minutos}"><span class="b"><button class="g" data-a="up">↑</button><button class="g" data-a="dn">↓</button><button class="r" data-a="rm">✕</button></span></div>`}).join('');
+  $('#app').innerHTML=`<header><button class="g" id="vl">Cultos</button><button id="lv">Painel Live</button></header><main>
+  <div class="row"><input id="cn" value="${esc(c.nome)}"><input id="ch" type="time" value="${c.hora_inicio.slice(0,5)}"></div>
+  <div id="its">${rows||'<p class="vz">Sem itens. Adicione o primeiro abaixo.</p>'}</div>
+  <p class="tot">Término previsto: ${hm(m)}</p>
+  <div class="row"><input id="an" placeholder="Novo item (ex.: Louvor)"><input id="am" type="number" min="0" step="0.5" value="5" style="max-width:90px"><button id="ad">Adicionar</button></div></main>`;
+  $('#vl').onclick=lista;$('#lv').onclick=()=>live(id);
+  $('#cn').onchange=e=>sb.from('cultos').update({nome:e.target.value}).eq('id',id);
+  $('#ch').onchange=async e=>{await sb.from('cultos').update({hora_inicio:e.target.value}).eq('id',id);culto(id)};
+  $('#ad').onclick=async()=>{const n=$('#an').value.trim();if(!n)return;await sb.from('itens').insert({culto_id:id,ordem:it.length?Math.max(...it.map(x=>x.ordem))+1:1,nome:n,minutos:+$('#am').value||5});culto(id)};
+  const box=$('#its');
+  box.onchange=async e=>{const r=e.target.closest('.it');if(!r)return;
+    if(e.target.classList.contains('nm')){await sb.from('itens').update({nome:e.target.value}).eq('id',r.dataset.id)}
+    else{await sb.from('itens').update({minutos:+e.target.value||0}).eq('id',r.dataset.id);culto(id)}};
+  box.onclick=async e=>{
+    const a=e.target.dataset.a,r=e.target.closest('.it');if(!a||!r)return;
+    const k=it.findIndex(x=>x.id===r.dataset.id);
+    if(a==='rm'){await sb.from('itens').delete().eq('id',r.dataset.id)}
+    else{const j=a==='up'?k-1:k+1;if(j<0||j>=it.length)return;
+      await Promise.all([sb.from('itens').update({ordem:it[j].ordem}).eq('id',it[k].id),sb.from('itens').update({ordem:it[k].ordem}).eq('id',it[j].id)])}
+    culto(id);
+  };
+}
+async function live(id){
+  clearInterval(timer);
+  const [a,b,s]=await Promise.all([sb.from('cultos').select('*').eq('id',id).single(),sb.from('itens').select('*').eq('culto_id',id).order('ordem'),sb.from('live_state').select('*').eq('culto_id',id).maybeSingle()]);
+  const c=a.data,it=b.data||[];
+  let st=s.data?{idx:s.data.idx,t0:s.data.t0?new Date(s.data.t0).getTime():null}:{idx:0,t0:null};
+  $('#app').innerHTML=`<header><button class="g" id="vl">Voltar</button><b>${esc(c.nome)}</b></header><main>
+  <p class="cur" id="cur"></p><p class="nxt" id="nxt"></p><div class="cd" id="cd"></div>
+  <div class="ctl"><button class="g" id="ant">Voltar</button><button id="ini">Iniciar</button><button id="prx">Próximo</button></div>
+  <button class="g" id="zer">Zerar</button>
+  <ul class="pl">${it.map(i=>`<li><span>${esc(i.nome)}</span><span>${i.minutos} min</span></li>`).join('')}</ul>
+  <h1 style="font-size:18px">Link da saída</h1>
+  <label>Link do fundo (ex.: Holyrics, opcional)<input id="hu" type="url" placeholder="http://192.168.0.10:8091/..."></label>
+  <div class="row"><select id="tm"><option value="claro">Tema claro</option><option value="escuro">Tema escuro</option></select><select id="ps"><option value="base">Embaixo</option><option value="topo">No topo</option></select></div>
+  <div class="row"><button class="g" id="c1">Copiar link online</button><button class="g" id="c2">Copiar só o final (?saida=…)</button></div>
+  <div id="lk"></div><p class="tot">Para projetar no computador da igreja: salve este index.html nele, abra o arquivo e cole no endereço o final copiado.</p></main>`;
+  const fim=()=>'?saida='+id+'&url='+encodeURIComponent($('#hu').value.trim())+'&tema='+$('#tm').value+'&pos='+$('#ps').value;
+  const copia=t=>{$('#lk').textContent=t;navigator.clipboard&&navigator.clipboard.writeText(t).catch(()=>{})};
+  $('#c1').onclick=()=>copia(location.href.split('?')[0]+fim());
+  $('#c2').onclick=()=>copia(fim());
+  function draw(){
+    const i=it[st.idx],rem=i?i.minutos*60-(st.t0?(Date.now()-st.t0)/1000:0):0;
+    $('#cd').textContent=i?(rem<0?'+':'')+fmt(rem):'';
+    $('#cd').className='cd'+(rem<0?' neg':'');
+    $('#cur').textContent=i?i.nome:'Sem itens';
+    $('#nxt').textContent=it[st.idx+1]?'A seguir: '+it[st.idx+1].nome:(i?'Último item':'');
+    document.querySelectorAll('.pl li').forEach((li,k)=>li.classList.toggle('on',k===st.idx));
+  }
+  async function set(idx,t0){
+    st={idx,t0};draw();
+    await sb.from('live_state').upsert({culto_id:id,idx,t0:t0?new Date(t0).toISOString():null,updated_at:new Date().toISOString()});
+  }
+  $('#vl').onclick=()=>culto(id);
+  $('#ini').onclick=()=>set(st.idx,Date.now());
+  $('#prx').onclick=()=>set(Math.min(it.length-1,st.idx+1),Date.now());
+  $('#ant').onclick=()=>set(Math.max(0,st.idx-1),Date.now());
+  $('#zer').onclick=()=>set(0,null);
+  draw();timer=setInterval(draw,250);
+}
+async function saida(id){
+  document.body.classList.add('s');
+  $('#app').style.display='none';$('#out').style.display='block';
+  const url=P.get('url');
+  if(url)$('#fr').src=url;else $('#fr').remove();
+  $('#lt').className=(P.get('tema')==='escuro'?'escuro':'claro')+(P.get('pos')==='topo'?' topo':'');
+  let it=[],st={idx:0,t0:null};
+  async function carregar(){
+    const [a,b]=await Promise.all([sb.from('itens').select('*').eq('culto_id',id).order('ordem'),sb.from('live_state').select('*').eq('culto_id',id).maybeSingle()]);
+    it=a.data||[];const s=b.data;
+    st=s?{idx:s.idx,t0:s.t0?new Date(s.t0).getTime():null}:{idx:0,t0:null};
+  }
+  function draw(){
+    $('#hora').innerHTML='Ao vivo <b>'+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'</b>';
+    const i=it[st.idx];
+    if(!i){$('#cr').textContent='';$('#nx').textContent='';return}
+    const rem=i.minutos*60-(st.t0?(Date.now()-st.t0)/1000:0);
+    $('#cr').textContent=(rem<0?'+':'')+fmt(rem);
+    $('#cr').classList.toggle('neg',rem<0);
+    const n=it[st.idx+1];
+    $('#nx').textContent=n?'A seguir: '+n.nome:'Último item: '+i.nome;
+  }
+  await carregar();
+  sb.channel('l'+id).on('postgres_changes',{event:'*',schema:'public',table:'live_state',filter:'culto_id=eq.'+id},carregar).subscribe();
+  setInterval(carregar,10000);
+  setInterval(draw,250);draw();
+}
+</script>
+</body>
+</html>
