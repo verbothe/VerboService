@@ -5,49 +5,78 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Programação do culto</title>
 <style>
+:root{--bg:#1c1c1d;--cd:#252526;--bd:#38383a;--tx:#e8e8e8;--mu:#9a9a9c;--ac:#4aa3ff;--ok:#5fcf8a;--ng:#ff5a45;color-scheme:dark}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
-body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f4f2ec;color:#1c1f1d}
+body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--tx)}
 body.s{background:transparent}
-header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;background:#fff;border-bottom:1px solid #d6d2c6;position:sticky;top:0;z-index:2}
-main{max-width:720px;margin:0 auto;padding:16px}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;background:var(--cd);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:2}
+main{max-width:980px;margin:0 auto;padding:16px}
 .box{max-width:360px;margin:12vh auto;padding:0 16px}
 h1{font-size:22px;margin:0 0 8px}
+h2{font-size:18px;margin:0}
 label{display:block;font-size:14px;font-weight:600;margin:12px 0 4px}
-input,select{width:100%;font:inherit;padding:10px;border:1px solid #d6d2c6;border-radius:6px;background:#fff;color:inherit}
-button{font:inherit;font-weight:600;padding:10px 14px;border-radius:6px;border:1px solid #2d6a4f;background:#2d6a4f;color:#fff;cursor:pointer}
-button.g{background:#fff;color:#2d6a4f}
-button.r{border-color:#b3261e;color:#b3261e;background:#fff}
+input,select{width:100%;font:inherit;padding:10px;border:1px solid var(--bd);border-radius:6px;background:#161617;color:var(--tx)}
+button{font:inherit;font-weight:600;padding:9px 13px;border-radius:6px;border:1px solid var(--ac);background:transparent;color:var(--ac);cursor:pointer}
+button.p{background:var(--ac);color:#06121f}
+button.g{border-color:var(--bd);color:var(--tx)}
+button.r{border-color:var(--ng);color:var(--ng)}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
 .row>input,.row>select{flex:1;min-width:110px;width:auto}
-.err{color:#b3261e;font-size:14px;min-height:20px}
-.vz{color:#5b5f5c}
-.l{list-style:none;padding:0;margin:14px 0}
-.l li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px;background:#fff;border:1px solid #d6d2c6;border-radius:8px;margin-bottom:8px;cursor:pointer}
-.l small{display:block;color:#5b5f5c;margin-top:2px}
-.it{display:grid;grid-template-columns:52px 1fr 70px auto;gap:6px;align-items:center;margin-bottom:8px}
-.it .t{font-variant-numeric:tabular-nums;color:#5b5f5c;font-size:14px}
+.b2{display:flex;gap:6px}
+.err{color:var(--ng);font-size:14px;min-height:20px}
+.vz,.tot{color:var(--mu);font-size:14px}
+.grid{display:grid;grid-template-columns:270px 1fr;gap:18px;align-items:start}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+.cal{background:var(--cd);border:1px solid var(--bd);border-radius:8px;padding:10px}
+.cal .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:600;text-transform:capitalize}
+.cal .hd button{padding:3px 10px}
+.cal table{width:100%;border-collapse:collapse;text-align:center}
+.cal th{font-size:11px;color:var(--mu);padding:4px 0}
+.cal td{padding:1px 0}
+.cal td span{display:flex;flex-direction:column;align-items:center;justify-content:center;width:34px;height:36px;margin:auto;border-radius:50%;cursor:pointer;font-size:14px}
+.cal td span.o{color:#59595b}
+.cal td span.hj{border:1px solid var(--mu)}
+.cal td span.sl{background:var(--ac);color:#06121f;font-weight:700}
+.cal td span i{width:5px;height:5px;border-radius:50%;background:var(--ac);margin-top:1px}
+.cal td span.sl i{background:#06121f}
+.cal td span i.x{visibility:hidden}
+.tp{background:var(--cd);border:1px solid var(--bd);border-radius:8px;margin-bottom:12px}
+.tp .th{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--bd)}
+.tp .th button{padding:5px 9px;font-size:13px}
+.tp .tb{padding:12px}
+.l{list-style:none;padding:0;margin:0 0 10px}
+.l li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;background:#161617;border:1px solid var(--bd);border-radius:8px;margin-bottom:8px;cursor:pointer}
+.l small{display:block;color:var(--mu);margin-top:2px}
+.pal{display:flex;gap:8px;margin:12px 0}
+.pal button{flex:1;display:flex;justify-content:space-between;align-items:center;border-color:var(--bd);color:var(--tx)}
+.pal kbd{background:#161617;border:1px solid var(--bd);border-radius:4px;padding:1px 7px;font-size:12px;color:var(--mu)}
+.it{display:grid;grid-template-columns:24px 48px 1fr 70px auto;gap:6px;align-items:center;margin-bottom:8px;background:var(--cd);border:1px solid var(--bd);border-radius:8px;padding:6px;position:relative}
+.it.h{background:#2d2d30;border-left:3px solid var(--ac)}
+.it.h .nm{font-weight:700}
+.it .gr{cursor:grab;touch-action:none;text-align:center;color:var(--mu);user-select:none;font-size:18px}
+.it.dg{z-index:3;border-color:var(--ac);opacity:.85}
+.it.ov{box-shadow:0 -4px 0 var(--ac)}
+.it .t{font-variant-numeric:tabular-nums;color:var(--mu);font-size:14px}
 .it .b{display:flex;gap:4px}
-.it button{padding:8px 10px}
-.tot{color:#5b5f5c;font-size:14px}
+.it button{padding:7px 9px}
 .cur{font-size:26px;font-weight:700;margin:6px 0 0}
-.nxt{color:#5b5f5c;margin:2px 0 8px}
-.cd{font-size:64px;font-weight:700;font-variant-numeric:tabular-nums;color:#2d6a4f;line-height:1.1}
-.cd.neg{color:#d93a25}
-.cd{cursor:text;touch-action:manipulation}
+.nxt{color:var(--mu);margin:2px 0 8px}
+.cd{font-size:64px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ok);line-height:1.1;cursor:text;touch-action:manipulation}
+.cd.neg{color:var(--ng)}
 .pl{list-style:none;padding:0;margin:14px 0}
-.pl li{padding:9px 12px;border:1px solid #d6d2c6;border-radius:6px;background:#fff;margin-bottom:6px;display:flex;justify-content:space-between}
-.pl li.on{border-color:#2d6a4f;background:#e6f1ea;font-weight:700}
+.pl li{padding:9px 12px;border:1px solid var(--bd);border-radius:6px;background:var(--cd);margin-bottom:6px;display:flex;justify-content:space-between}
+.pl li.on{border-color:var(--ok);background:#1d3527;font-weight:700}
 .ctl{display:grid;grid-template-columns:1fr 2fr 1fr;gap:8px;margin:10px 0}
 .ctl button{padding:16px 10px;font-size:17px}
-#lk{font-size:12px;word-break:break-all;color:#444;margin-top:8px}
-#out{position:fixed;inset:0;display:none;background:transparent}
-#out iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent}
-#lt{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:2.5em;padding:.9em 2.5em .9em 1.6em;border-top:.8em solid #2d6a4f;font-size:calc(var(--s,1)*1vw);line-height:1.1}
+#lk{font-size:12px;word-break:break-all;color:var(--mu);margin-top:8px}
+#out{position:fixed;inset:0;display:none;flex-direction:column;background:transparent}
+#out iframe{flex:1;min-height:0;width:100%;border:0;background:transparent}
+#lt{flex:none;margin-top:auto;display:flex;align-items:center;gap:2.5em;padding:.9em 2.5em .9em 1.6em;border-top:.8em solid #2d6a4f;font-size:calc(var(--s,1)*1vw);line-height:1.1}
 #lt.neg{border-top-color:#d93a25}
 #lt.claro{background:#fff;color:#161816}
 #lt.escuro{background:#121413;color:#fff}
-#lt.topo{bottom:auto;top:0;border-top:0;border-bottom:.8em solid #2d6a4f}
+#lt.topo{order:-1;margin-top:0;border-top:0;border-bottom:.8em solid #2d6a4f}
 #lt.topo.neg{border-bottom-color:#d93a25}
 #lt .k{display:flex;flex-direction:column;align-items:flex-start;gap:.3em}
 #lt .c{font-size:10em;font-weight:300;line-height:1;font-variant-numeric:tabular-nums;color:#2d6a4f;white-space:nowrap}
@@ -72,6 +101,9 @@ const hm=m=>{m=Math.round(m)%1440;return String(Math.floor(m/60)).padStart(2,'0'
 const toMin=t=>{const [h,m]=t.split(':');return +h*60+ +m};
 const P=new URLSearchParams(location.search);
 let timer;
+const ds=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+let selD=ds(new Date()),cur=new Date();cur.setDate(1);
+const irLista=d=>{selD=d;const x=new Date(d+'T00:00:00');cur=new Date(x.getFullYear(),x.getMonth(),1);lista()};
 
 if(P.get('saida'))saida(P.get('saida'));else admin();
 
@@ -88,17 +120,43 @@ function login(msg=''){
   };
 }
 async function lista(){
-  clearInterval(timer);
-  const {data}=await sb.from('cultos').select('*').order('data',{ascending:false});
-  $('#app').innerHTML=`<header><b>Cultos</b><button class="g" id="sair">Sair</button></header><main>
-  <form id="nf" class="row"><input id="nn" placeholder="Nome do culto" required><input id="nd" type="date" required><input id="nh" type="time" value="18:00" required><button>Criar culto</button></form>
-  <ul class="l">${(data||[]).map(c=>`<li data-id="${c.id}"><span><b>${esc(c.nome)}</b><small>${c.data.split('-').reverse().join('/')} às ${c.hora_inicio.slice(0,5)}</small></span><button class="r" data-a="del">Excluir</button></li>`).join('')||'<li class="vz">Nenhum culto ainda. Crie o primeiro acima.</li>'}</ul></main>`;
+  clearInterval(timer);document.onkeydown=null;
+  const [t,c]=await Promise.all([sb.from('tipos').select('*').order('ordem').order('nome'),sb.from('cultos').select('*').order('hora_inicio')]);
+  const tipos=t.data||[],cultos=c.data||[],datas=new Set(cultos.map(x=>x.data)),hj=ds(new Date());
+  const y=cur.getFullYear(),mo=cur.getMonth(),pri=new Date(y,mo,1).getDay();
+  let cel='';
+  for(let k=0;k<42;k++){
+    if(k%7===0)cel+='<tr>';
+    const d=new Date(y,mo,1-pri+k),s=ds(d);
+    cel+=`<td><span data-d="${s}" class="${d.getMonth()!==mo?'o ':''}${s===hj?'hj ':''}${s===selD?'sl':''}">${d.getDate()}<i class="${datas.has(s)?'':'x'}"></i></span></td>`;
+    if(k%7===6)cel+='</tr>';
+  }
+  const dia=cultos.filter(x=>x.data===selD);
+  const li=x=>`<li data-id="${x.id}"><span><b>${esc(x.nome)}</b><small>${x.hora_inicio.slice(0,5)}</small></span><button class="r" data-a="del">Excluir</button></li>`;
+  const card=tp=>{
+    const ps=dia.filter(x=>(x.tipo_id||null)===(tp?tp.id:null));
+    return `<div class="tp"><div class="th"><b>${tp?esc(tp.nome):'Sem categoria'}</b>${tp?`<span class="b2"><button class="g" data-t="${tp.id}" data-a="ren">Renomear</button><button class="r" data-t="${tp.id}" data-a="dt">Excluir</button></span>`:''}</div><div class="tb">${ps.length?`<ul class="l">${ps.map(li).join('')}</ul>`:'<p class="vz">Nenhum culto neste dia.</p>'}${tp?`<button data-t="${tp.id}" data-a="add">+ Adicionar culto</button>`:''}</div></div>`;
+  };
+  const sem=dia.some(x=>!x.tipo_id)?card(null):'';
+  $('#app').innerHTML=`<header><b>Programação</b><button class="g" id="sair">Sair</button></header><main><div class="grid">
+  <div><div class="cal"><div class="hd"><span>${cur.toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}</span><span class="b2"><button class="g" data-m="-1">‹</button><button class="g" data-m="0">•</button><button class="g" data-m="1">›</button></span></div>
+  <table><tr>${['DOM','SEG','TER','QUA','QUI','SEX','SÁB'].map(x=>`<th>${x}</th>`).join('')}</tr>${cel}</table></div></div>
+  <div id="col"><div class="row" style="justify-content:space-between;align-items:center"><h2>${selD.split('-').reverse().join('/')}</h2><button class="p" id="nt">Adicionar categoria</button></div>
+  ${tipos.map(x=>card(x)).join('')||'<p class="vz">Crie a primeira categoria (ex.: Avisos, Programação) com o botão acima.</p>'}${sem}</div></div></main>`;
   $('#sair').onclick=async()=>{await sb.auth.signOut();login()};
-  $('#nf').onsubmit=async e=>{e.preventDefault();const {data:n}=await sb.from('cultos').insert({nome:$('#nn').value.trim(),data:$('#nd').value,hora_inicio:$('#nh').value}).select().single();if(n)culto(n.id)};
-  document.querySelector('.l').onclick=async e=>{
-    const li=e.target.closest('li[data-id]');if(!li)return;
-    if(e.target.dataset.a==='del'){if(confirm('Excluir este culto e toda a programação?')){await sb.from('cultos').delete().eq('id',li.dataset.id);lista()}return}
-    culto(li.dataset.id);
+  $('#nt').onclick=async()=>{const n=prompt('Nome da categoria');if(n&&n.trim()){await sb.from('tipos').insert({nome:n.trim(),ordem:tipos.length});lista()}};
+  document.querySelector('.cal').onclick=e=>{
+    const m=e.target.closest('[data-m]');
+    if(m){const v=+m.dataset.m;if(v===0){irLista(ds(new Date()))}else{cur=new Date(cur.getFullYear(),cur.getMonth()+v,1);lista()}return}
+    const d=e.target.closest('[data-d]');if(d)irLista(d.dataset.d);
+  };
+  $('#col').onclick=async e=>{
+    const a=e.target.dataset.a,tid=e.target.dataset.t,li=e.target.closest('li[data-id]');
+    if(a==='add'){const {data:n}=await sb.from('cultos').insert({nome:tipos.find(x=>x.id===tid).nome,data:selD,hora_inicio:'18:00',tipo_id:tid}).select().single();if(n)culto(n.id);return}
+    if(a==='ren'){const n=prompt('Novo nome',tipos.find(x=>x.id===tid).nome);if(n&&n.trim()){await sb.from('tipos').update({nome:n.trim()}).eq('id',tid);lista()}return}
+    if(a==='dt'){if(confirm('Excluir esta categoria e todos os cultos dela?')){await sb.from('tipos').delete().eq('id',tid);lista()}return}
+    if(a==='del'){if(confirm('Excluir este culto e toda a programação?')){await sb.from('cultos').delete().eq('id',li.dataset.id);lista()}return}
+    if(li)culto(li.dataset.id);
   };
 }
 async function culto(id){
@@ -106,38 +164,80 @@ async function culto(id){
   const [a,b]=await Promise.all([sb.from('cultos').select('*').eq('id',id).single(),sb.from('itens').select('*').eq('culto_id',id).order('ordem')]);
   const c=a.data,it=b.data||[];
   let m=toMin(c.hora_inicio.slice(0,5));
-  const rows=it.map(i=>{const t=hm(m);m+=Number(i.minutos);return `<div class="it" data-id="${i.id}"><span class="t">${t}</span><input class="nm" value="${esc(i.nome)}"><input class="mn" type="number" min="0" step="0.5" value="${i.minutos}"><span class="b"><button class="g" data-a="up">↑</button><button class="g" data-a="dn">↓</button><button class="r" data-a="rm">✕</button></span></div>`}).join('');
-  $('#app').innerHTML=`<header><button class="g" id="vl">Cultos</button><button id="lv">Painel Live</button></header><main>
-  <div class="row"><input id="cn" value="${esc(c.nome)}"><input id="ch" type="time" value="${c.hora_inicio.slice(0,5)}"></div>
-  <div id="its">${rows||'<p class="vz">Sem itens. Adicione o primeiro abaixo.</p>'}</div>
-  <p class="tot">Término previsto: ${hm(m)}</p>
-  <div class="row"><input id="an" placeholder="Novo item (ex.: Louvor)"><input id="am" type="number" min="0" step="0.5" value="5" style="max-width:90px"><button id="ad">Adicionar</button></div></main>`;
-  $('#vl').onclick=lista;$('#lv').onclick=()=>live(id);
+  const rows=it.map(i=>{
+    const h=i.tipo==='header',t=h?'':hm(m);if(!h)m+=Number(i.minutos);
+    return `<div class="it${h?' h':''}" data-id="${i.id}"><span class="gr">⠿</span><span class="t">${t}</span><input class="nm" value="${esc(i.nome)}">${h?'<span></span>':`<input class="mn" type="number" min="0" step="0.5" value="${i.minutos}">`}<span class="b"><button class="g" data-a="up">↑</button><button class="g" data-a="dn">↓</button><button class="r" data-a="rm">✕</button></span></div>`;
+  }).join('');
+  $('#app').innerHTML=`<header><button class="g" id="vl">Voltar</button><button class="p" id="lv">Painel Live</button></header><main>
+  <div class="row"><input id="cn" value="${esc(c.nome)}"><input id="cd2" type="date" value="${c.data}"><input id="ch" type="time" value="${c.hora_inicio.slice(0,5)}"></div>
+  <div class="pal"><button id="pi">Item <kbd>i</kbd></button><button id="ph">Cabeçalho <kbd>h</kbd></button></div>
+  <div id="its">${rows||'<p class="vz">Sem itens. Adicione um acima.</p>'}</div>
+  <p class="tot">Término previsto: ${hm(m)}. Arraste pelo ⠿ ou use as setas para reorganizar.</p>
+  <div class="row"><input id="dd" type="date"><button class="g" id="dp">Duplicar para esta data</button></div></main>`;
+  $('#vl').onclick=()=>irLista(c.data);$('#lv').onclick=()=>live(id);
   $('#cn').onchange=e=>sb.from('cultos').update({nome:e.target.value}).eq('id',id);
   $('#ch').onchange=async e=>{await sb.from('cultos').update({hora_inicio:e.target.value}).eq('id',id);culto(id)};
-  $('#ad').onclick=async()=>{const n=$('#an').value.trim();if(!n)return;await sb.from('itens').insert({culto_id:id,ordem:it.length?Math.max(...it.map(x=>x.ordem))+1:1,nome:n,minutos:+$('#am').value||5});culto(id)};
+  $('#cd2').onchange=async e=>{if(e.target.value){await sb.from('cultos').update({data:e.target.value}).eq('id',id);culto(id)}};
+  const add=async tipo=>{
+    const h=tipo==='header';
+    await sb.from('itens').insert({culto_id:id,ordem:it.length?Math.max(...it.map(x=>x.ordem))+1:1,nome:h?'Novo cabeçalho':'Novo item',minutos:h?0:5,tipo});
+    culto(id);
+  };
+  $('#pi').onclick=()=>add('item');$('#ph').onclick=()=>add('header');
+  document.onkeydown=e=>{
+    if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)||e.ctrlKey||e.metaKey||e.altKey)return;
+    if(e.key==='i')add('item');else if(e.key==='h')add('header');
+  };
+  $('#dp').onclick=async()=>{
+    const d=$('#dd').value;if(!d){alert('Escolha a data.');return}
+    const {data:n}=await sb.from('cultos').insert({nome:c.nome,data:d,hora_inicio:c.hora_inicio,tipo_id:c.tipo_id}).select().single();
+    if(n&&it.length)await sb.from('itens').insert(it.map(x=>({culto_id:n.id,ordem:x.ordem,nome:x.nome,minutos:x.minutos,tipo:x.tipo||'item'})));
+    if(n)culto(n.id);
+  };
   const box=$('#its');
-  box.onchange=async e=>{const r=e.target.closest('.it');if(!r)return;
+  box.onchange=async e=>{
+    const r=e.target.closest('.it');if(!r)return;
     if(e.target.classList.contains('nm')){await sb.from('itens').update({nome:e.target.value}).eq('id',r.dataset.id)}
-    else{await sb.from('itens').update({minutos:+e.target.value||0}).eq('id',r.dataset.id);culto(id)}};
+    else{await sb.from('itens').update({minutos:+e.target.value||0}).eq('id',r.dataset.id);culto(id)}
+  };
+  const salvar=ids=>Promise.all(ids.map((x,k)=>{const o=it.find(y=>y.id===x);return o.ordem===k+1?0:sb.from('itens').update({ordem:k+1}).eq('id',x)}));
   box.onclick=async e=>{
     const a=e.target.dataset.a,r=e.target.closest('.it');if(!a||!r)return;
     const k=it.findIndex(x=>x.id===r.dataset.id);
     if(a==='rm'){await sb.from('itens').delete().eq('id',r.dataset.id)}
-    else{const j=a==='up'?k-1:k+1;if(j<0||j>=it.length)return;
-      await Promise.all([sb.from('itens').update({ordem:it[j].ordem}).eq('id',it[k].id),sb.from('itens').update({ordem:it[k].ordem}).eq('id',it[j].id)])}
+    else{const j=a==='up'?k-1:k+1;if(j<0||j>=it.length)return;const ids=it.map(x=>x.id);[ids[k],ids[j]]=[ids[j],ids[k]];await salvar(ids)}
     culto(id);
+  };
+  box.onpointerdown=e=>{
+    const g=e.target.closest('.gr');if(!g)return;
+    e.preventDefault();
+    const row=g.closest('.it'),others=[...box.querySelectorAll('.it')].filter(r=>r!==row),y0=e.clientY;
+    let to=others.length;
+    row.classList.add('dg');
+    const mv=ev=>{
+      row.style.transform='translateY('+(ev.clientY-y0)+'px)';
+      others.forEach(r=>r.classList.remove('ov'));
+      to=others.findIndex(r=>ev.clientY<r.getBoundingClientRect().top+r.offsetHeight/2);
+      if(to<0)to=others.length;
+      if(others[to])others[to].classList.add('ov');
+    };
+    const up=async()=>{
+      removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up);
+      const ids=others.map(r=>r.dataset.id);ids.splice(to,0,row.dataset.id);
+      await salvar(ids);culto(id);
+    };
+    addEventListener('pointermove',mv);addEventListener('pointerup',up);addEventListener('pointercancel',up);
   };
 }
 async function live(id){
-  clearInterval(timer);
+  clearInterval(timer);document.onkeydown=null;
   const [a,b,s]=await Promise.all([sb.from('cultos').select('*').eq('id',id).single(),sb.from('itens').select('*').eq('culto_id',id).order('ordem'),sb.from('live_state').select('*').eq('culto_id',id).maybeSingle()]);
-  const c=a.data,it=b.data||[];
+  const c=a.data,it=(b.data||[]).filter(x=>x.tipo!=='header');
   let st=s.data?{idx:s.data.idx,t0:s.data.t0?new Date(s.data.t0).getTime():null}:{idx:0,t0:null};
   let edit=false,ult=0;
   $('#app').innerHTML=`<header><button class="g" id="vl">Voltar</button><b>${esc(c.nome)}</b></header><main>
   <p class="cur" id="cur"></p><p class="nxt" id="nxt"></p><div class="cd" id="cd"></div><p class="tot" style="margin:2px 0 8px">Toque duas vezes no tempo para ajustar.</p>
-  <div class="ctl"><button class="g" id="ant">Voltar</button><button id="ini">Iniciar</button><button id="prx">Próximo</button></div>
+  <div class="ctl"><button class="g" id="ant">Voltar</button><button class="p" id="ini">Iniciar</button><button class="p" id="prx">Próximo</button></div>
   <button class="g" id="zer">Zerar</button>
   <ul class="pl">${it.map(i=>`<li><span>${esc(i.nome)}</span><span>${i.minutos} min</span></li>`).join('')}</ul>
   <h1 style="font-size:18px">Link da saída</h1>
@@ -187,7 +287,7 @@ async function live(id){
 }
 async function saida(id){
   document.body.classList.add('s');
-  $('#app').style.display='none';$('#out').style.display='block';
+  $('#app').style.display='none';$('#out').style.display='flex';
   const url=P.get('url');
   if(url)$('#fr').src=url;else $('#fr').remove();
   $('#lt').className=(P.get('tema')==='escuro'?'escuro':'claro')+(P.get('pos')==='topo'?' topo':'');
@@ -195,7 +295,7 @@ async function saida(id){
   let it=[],st={idx:0,t0:null},fim='';
   async function carregar(){
     const [a,b,c]=await Promise.all([sb.from('itens').select('*').eq('culto_id',id).order('ordem'),sb.from('live_state').select('*').eq('culto_id',id).maybeSingle(),sb.from('cultos').select('hora_inicio').eq('id',id).maybeSingle()]);
-    it=a.data||[];const s=b.data;
+    it=(a.data||[]).filter(x=>x.tipo!=='header');const s=b.data;
     st=s?{idx:s.idx,t0:s.t0?new Date(s.t0).getTime():null}:{idx:0,t0:null};
     fim=c.data?hm(toMin(c.data.hora_inicio.slice(0,5))+it.reduce((x,y)=>x+Number(y.minutos),0)):'';
   }
