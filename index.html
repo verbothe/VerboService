@@ -133,7 +133,7 @@ async function lista(){
     if(k%7===6)cel+='</tr>';
   }
   const dia=cultos.filter(x=>x.data===selD);
-  const li=x=>`<li data-id="${x.id}"><span><b>${esc(x.nome)}</b><small>${x.hora_inicio.slice(0,5)}</small></span><button class="r" data-a="del">Excluir</button></li>`;
+  const li=x=>`<li data-id="${x.id}"><span><b>${esc(x.nome)}</b><small>${x.hora_inicio.slice(0,5)}</small></span><span class="b2"><button class="g" data-a="ed">Editar</button><button class="r" data-a="del">Excluir</button></span></li>`;
   $('#app').innerHTML=`<header><b>Programação</b><button class="g" id="sair">Sair</button></header><main><div class="grid">
   <div><div class="cal"><div class="hd"><span>${cur.toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}</span><span class="b2"><button class="g" data-m="-1">‹</button><button class="g" data-m="0">•</button><button class="g" data-m="1">›</button></span></div>
   <table><tr>${['DOM','SEG','TER','QUA','QUI','SEX','SÁB'].map(x=>`<th>${x}</th>`).join('')}</tr>${cel}</table></div></div>
