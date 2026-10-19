@@ -33,7 +33,8 @@ button.r{border-color:#b3261e;color:#b3261e;background:#fff}
 .cur{font-size:26px;font-weight:700;margin:6px 0 0}
 .nxt{color:#5b5f5c;margin:2px 0 8px}
 .cd{font-size:64px;font-weight:700;font-variant-numeric:tabular-nums;color:#2d6a4f;line-height:1.1}
-.cd.neg{color:#b3261e}
+.cd.neg{color:#d93a25}
+.cd{cursor:text;touch-action:manipulation}
 .pl{list-style:none;padding:0;margin:14px 0}
 .pl li{padding:9px 12px;border:1px solid #d6d2c6;border-radius:6px;background:#fff;margin-bottom:6px;display:flex;justify-content:space-between}
 .pl li.on{border-color:#2d6a4f;background:#e6f1ea;font-weight:700}
@@ -42,20 +43,22 @@ button.r{border-color:#b3261e;color:#b3261e;background:#fff}
 #lk{font-size:12px;word-break:break-all;color:#444;margin-top:8px}
 #out{position:fixed;inset:0;display:none;background:transparent}
 #out iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent}
-#lt{position:absolute;left:3vw;right:3vw;bottom:3vh;padding:1.2vw 1.8vw;border-radius:.6vw;display:flex;align-items:center;gap:1.8vw;font-size:3.4vw;line-height:1.1}
-#lt.claro{background:rgba(255,255,255,.94);color:#161816}
-#lt.escuro{background:rgba(18,20,19,.92);color:#fff}
-#lt.topo{bottom:auto;top:3vh}
-#lt .h{font-weight:300;font-size:1.6em;white-space:nowrap}
-#lt .h b{font-weight:700}
-#lt .c{font-variant-numeric:tabular-nums;font-weight:700;padding:.15em .5em;border-radius:.25em;background:#2d6a4f;color:#fff;white-space:nowrap}
-#lt .c.neg{background:#b3261e}
-#lt .n{font-size:.8em;opacity:.85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#lt{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:2.5em;padding:.9em 2.5em .9em 1.6em;border-top:.8em solid #2d6a4f;font-size:calc(var(--s,1)*1vw);line-height:1.1}
+#lt.neg{border-top-color:#d93a25}
+#lt.claro{background:#fff;color:#161816}
+#lt.escuro{background:#121413;color:#fff}
+#lt.topo{bottom:auto;top:0;border-top:0;border-bottom:.8em solid #2d6a4f}
+#lt.topo.neg{border-bottom-color:#d93a25}
+#lt .k{display:flex;flex-direction:column;align-items:flex-start;gap:.3em}
+#lt .c{font-size:10em;font-weight:300;line-height:1;font-variant-numeric:tabular-nums;color:#2d6a4f;white-space:nowrap}
+#lt .c.neg{color:#d93a25}
+#lt .f{font-size:1.9em;opacity:.7;white-space:nowrap}
+#lt .n{font-size:2.8em;opacity:.7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
 </style>
 </head>
 <body>
 <div id="app"></div>
-<div id="out"><iframe id="fr" allow="autoplay"></iframe><div id="lt"><div class="h" id="hora"></div><div class="c" id="cr"></div><div class="n" id="nx"></div></div></div>
+<div id="out"><iframe id="fr" allow="autoplay"></iframe><div id="lt"><div class="k"><div class="c" id="cr"></div><div class="f" id="fn"></div></div><div class="n" id="nx"></div></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
@@ -131,8 +134,9 @@ async function live(id){
   const [a,b,s]=await Promise.all([sb.from('cultos').select('*').eq('id',id).single(),sb.from('itens').select('*').eq('culto_id',id).order('ordem'),sb.from('live_state').select('*').eq('culto_id',id).maybeSingle()]);
   const c=a.data,it=b.data||[];
   let st=s.data?{idx:s.data.idx,t0:s.data.t0?new Date(s.data.t0).getTime():null}:{idx:0,t0:null};
+  let edit=false,ult=0;
   $('#app').innerHTML=`<header><button class="g" id="vl">Voltar</button><b>${esc(c.nome)}</b></header><main>
-  <p class="cur" id="cur"></p><p class="nxt" id="nxt"></p><div class="cd" id="cd"></div>
+  <p class="cur" id="cur"></p><p class="nxt" id="nxt"></p><div class="cd" id="cd"></div><p class="tot" style="margin:2px 0 8px">Toque duas vezes no tempo para ajustar.</p>
   <div class="ctl"><button class="g" id="ant">Voltar</button><button id="ini">Iniciar</button><button id="prx">Próximo</button></div>
   <button class="g" id="zer">Zerar</button>
   <ul class="pl">${it.map(i=>`<li><span>${esc(i.nome)}</span><span>${i.minutos} min</span></li>`).join('')}</ul>
@@ -147,7 +151,7 @@ async function live(id){
   $('#c2').onclick=()=>copia(fim());
   function draw(){
     const i=it[st.idx],rem=i?i.minutos*60-(st.t0?(Date.now()-st.t0)/1000:0):0;
-    $('#cd').textContent=i?(rem<0?'+':'')+fmt(rem):'';
+    if(!edit)$('#cd').textContent=i?(rem<0?'-':'')+fmt(rem):'';
     $('#cd').className='cd'+(rem<0?' neg':'');
     $('#cur').textContent=i?i.nome:'Sem itens';
     $('#nxt').textContent=it[st.idx+1]?'A seguir: '+it[st.idx+1].nome:(i?'Último item':'');
@@ -162,6 +166,23 @@ async function live(id){
   $('#prx').onclick=()=>set(Math.min(it.length-1,st.idx+1),Date.now());
   $('#ant').onclick=()=>set(Math.max(0,st.idx-1),Date.now());
   $('#zer').onclick=()=>set(0,null);
+  function editar(){
+    const i=it[st.idx];if(!i||edit)return;
+    edit=true;
+    const rem=i.minutos*60-(st.t0?(Date.now()-st.t0)/1000:0);
+    $('#cd').innerHTML='<input id="ed" style="font:inherit;color:inherit;width:4.6em;text-align:center;padding:0">';
+    const ed=$('#ed');ed.value=(rem<0?'-':'')+fmt(rem);ed.focus();ed.select();
+    const ok=()=>{
+      if(!edit)return;edit=false;
+      const m=ed.value.trim().match(/^(-)?(\d+)(?::(\d{1,2}))?$/);
+      if(!m){draw();return}
+      const secs=(+m[2])*60+(+(m[3]||0)),novo=m[1]?-secs:secs;
+      set(st.idx,Date.now()-(i.minutos*60-novo)*1000);
+    };
+    ed.onblur=ok;
+    ed.onkeydown=e=>{if(e.key==='Enter')ed.blur();if(e.key==='Escape'){edit=false;draw()}};
+  }
+  $('#cd').onclick=()=>{const n=Date.now();if(n-ult<400)editar();ult=n};
   draw();timer=setInterval(draw,250);
 }
 async function saida(id){
@@ -170,21 +191,23 @@ async function saida(id){
   const url=P.get('url');
   if(url)$('#fr').src=url;else $('#fr').remove();
   $('#lt').className=(P.get('tema')==='escuro'?'escuro':'claro')+(P.get('pos')==='topo'?' topo':'');
-  let it=[],st={idx:0,t0:null};
+  $('#lt').style.setProperty('--s',+P.get('escala')||1);
+  let it=[],st={idx:0,t0:null},fim='';
   async function carregar(){
-    const [a,b]=await Promise.all([sb.from('itens').select('*').eq('culto_id',id).order('ordem'),sb.from('live_state').select('*').eq('culto_id',id).maybeSingle()]);
+    const [a,b,c]=await Promise.all([sb.from('itens').select('*').eq('culto_id',id).order('ordem'),sb.from('live_state').select('*').eq('culto_id',id).maybeSingle(),sb.from('cultos').select('hora_inicio').eq('id',id).maybeSingle()]);
     it=a.data||[];const s=b.data;
     st=s?{idx:s.idx,t0:s.t0?new Date(s.t0).getTime():null}:{idx:0,t0:null};
+    fim=c.data?hm(toMin(c.data.hora_inicio.slice(0,5))+it.reduce((x,y)=>x+Number(y.minutos),0)):'';
   }
   function draw(){
-    $('#hora').innerHTML='Ao vivo <b>'+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+'</b>';
-    const i=it[st.idx];
-    if(!i){$('#cr').textContent='';$('#nx').textContent='';return}
+    const i=it[st.idx],lt=$('#lt');
+    if(!i){$('#cr').textContent='';$('#nx').textContent='';$('#fn').textContent='';return}
     const rem=i.minutos*60-(st.t0?(Date.now()-st.t0)/1000:0);
-    $('#cr').textContent=(rem<0?'+':'')+fmt(rem);
-    $('#cr').classList.toggle('neg',rem<0);
+    $('#cr').textContent=(rem<0?'-':'')+fmt(rem);
+    $('#cr').classList.toggle('neg',rem<0);lt.classList.toggle('neg',rem<0);
+    $('#fn').textContent=fim?'serviço finaliza às '+fim:'';
     const n=it[st.idx+1];
-    $('#nx').textContent=n?'A seguir: '+n.nome:'Último item: '+i.nome;
+    $('#nx').textContent=n?'A seguir: '+n.nome:'Último item';
   }
   await carregar();
   sb.channel('l'+id).on('postgres_changes',{event:'*',schema:'public',table:'live_state',filter:'culto_id=eq.'+id},carregar).subscribe();
