@@ -156,6 +156,8 @@ button:disabled{opacity:.4;cursor:default}
 <script>
 const SB_URL='https://lnbunuppttmcrqhxalpp.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxuYnVudXBwdHRtY3JxaHhhbHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyNjI4NDAsImV4cCI6MjEwNzgzODg0MH0.RXTVze45uxDJBn8j9KcuKrgDtPB72nbSGIxanb3bCi8';
+const HASH0=location.hash;
+let precisaSenha=/type=(recovery|invite)/.test(HASH0);
 const sb=supabase.createClient(SB_URL,SB_KEY);
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -182,12 +184,14 @@ AP.addEventListener('click',async e=>{
 });
 let bloqueado=false;
 async function carregarPapel(){
-  papel='operador';bloqueado=false;
+  bloqueado=false;
   try{
-    const {data:{user}}=await sb.auth.getUser();if(!user)return;
+    const {data:{session}}=await sb.auth.getSession();const user=session&&session.user;
+    if(!user){papel='operador';return}
     let r=await sb.from('perfis').select('papel,ativo').eq('user_id',user.id).maybeSingle();
     if(r.error)r=await sb.from('perfis').select('papel').eq('user_id',user.id).maybeSingle();
-    const d=r.data;
+    if(r.error)return;
+    const d=r.data;papel='operador';
     if(d){if(d.ativo===false)bloqueado=true;else if(d.papel==='admin')papel='admin'}
   }catch(e){}
 }
@@ -301,14 +305,36 @@ function gerarPDF(c,it,o){
 }
 async function admin(){
   const {data:{session}}=await sb.auth.getSession();
-  if(!session){login();return}
+  if(!session){
+    login(/error_code=otp_expired/.test(HASH0)?'O link expirou ou já foi usado. Clique em "Esqueci a senha" para receber outro.':'');
+    return;
+  }
+  if(precisaSenha){definirSenha();return}
   await carregarPapel();
   if(bloqueado){await sb.auth.signOut();login('Seu acesso foi bloqueado. Fale com um administrador.');return}
   lista();
 }
+function definirSenha(msg=''){
+  clearInterval(timer);
+  $('#app').innerHTML=`<div class="box"><h1>Definir senha</h1><p class="vz">Escolha a senha que você vai usar para entrar.</p><p class="err">${esc(msg)}</p><label>Nova senha<input id="s1" type="password" autocomplete="new-password"></label><label>Repita a senha<input id="s2" type="password" autocomplete="new-password"></label><div class="row"><button class="p" id="go">Salvar senha</button></div></div>`;
+  $('#go').onclick=async()=>{
+    const a=$('#s1').value,b=$('#s2').value;
+    if(a.length<6){definirSenha('Use pelo menos 6 caracteres.');return}
+    if(a!==b){definirSenha('As senhas não conferem.');return}
+    const {error}=await sb.auth.updateUser({password:a});
+    if(error){definirSenha(error.message);return}
+    precisaSenha=false;history.replaceState(null,'',location.pathname);admin();
+  };
+}
 function login(msg=''){
   clearInterval(timer);
-  $('#app').innerHTML=`<div class="box"><h1>Entrar</h1><p class="err">${esc(msg)}</p><label>E-mail<input id="em" type="email" autocomplete="username"></label><label>Senha<input id="pw" type="password" autocomplete="current-password"></label><div class="row"><button id="go">Entrar</button></div></div>`;
+  $('#app').innerHTML=`<div class="box"><h1>Entrar</h1><p class="err">${esc(msg)}</p><label>E-mail<input id="em" type="email" autocomplete="username"></label><label>Senha<input id="pw" type="password" autocomplete="current-password"></label><div class="row"><button class="p" id="go">Entrar</button><button class="g" id="esq">Esqueci a senha</button></div></div>`;
+  $('#esq').onclick=async()=>{
+    const em=$('#em').value.trim();
+    if(!em){login('Digite seu e-mail e clique em Esqueci a senha.');return}
+    const {error}=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.origin+location.pathname});
+    login(error?error.message:'Enviamos um link para o seu e-mail. Abra o link neste mesmo navegador.');
+  };
   $('#go').onclick=async()=>{
     const {error}=await sb.auth.signInWithPassword({email:$('#em').value.trim(),password:$('#pw').value});
     error?login(({'Invalid login credentials':'E-mail ou senha incorretos.','Email not confirmed':'E-mail ainda não confirmado no Supabase.'})[error.message]||error.message):admin();
@@ -317,8 +343,8 @@ function login(msg=''){
 async function usuarios(){
   if(papel!=='admin'){lista();return}
   vista='usuarios';clearInterval(timer);document.onkeydown=null;
-  const [r,u0]=await Promise.all([sb.from('perfis').select('*').order('email'),sb.auth.getUser()]);
-  const data=r.data||[],eu=u0.data.user;
+  const [r,u0]=await Promise.all([sb.from('perfis').select('*').order('email'),sb.auth.getSession()]);
+  const data=r.data||[],eu=u0.data.session&&u0.data.session.user;
   const rows=data.map(u=>{
     const meu=eu&&u.user_id===eu.id,at=u.ativo!==false;
     return `<div class="us${at?'':' bl'}" data-id="${u.user_id}"><div><b>${esc(u.email||'(sem e-mail)')}</b><small>${meu?'Você':(at?'Ativo':'Bloqueado')}</small></div><select class="pp"${meu?' disabled':''}><option value="operador"${u.papel==='operador'?' selected':''}>Operador</option><option value="admin"${u.papel==='admin'?' selected':''}>Administrador</option></select><button class="${at?'r':'g'}" data-a="bl"${meu?' disabled':''}>${at?'Bloquear':'Desbloquear'}</button></div>`;
