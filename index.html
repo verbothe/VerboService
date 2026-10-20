@@ -29,7 +29,8 @@ button.r{border-color:var(--ng);color:var(--ng)}
 .grid{display:grid;grid-template-columns:270px 1fr;gap:18px;align-items:start}
 @media(max-width:700px){.grid{grid-template-columns:1fr}}
 .cal{background:var(--cd);border:1px solid var(--bd);border-radius:8px;padding:10px}
-.cal .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:600;text-transform:capitalize}
+.cal .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:600}
+.cal .hd>span:first-child::first-letter{text-transform:uppercase}
 .cal .hd button{padding:3px 10px}
 .cal table{width:100%;border-collapse:collapse;text-align:center}
 .cal th{font-size:11px;color:var(--mu);padding:4px 0}
@@ -70,6 +71,16 @@ button.r{border-color:var(--ng);color:var(--ng)}
 .ctl{display:grid;grid-template-columns:1fr 2fr 1fr;gap:8px;margin:10px 0}
 .ctl button{padding:16px 10px;font-size:17px}
 #lk{font-size:12px;word-break:break-all;color:var(--mu);margin-top:8px}
+input[type=checkbox]{width:auto}
+textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--bd);border-radius:6px;background:#161617;color:var(--tx);resize:vertical}
+.ck{display:flex;align-items:center;gap:8px;font-weight:500;margin:10px 0}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.chips button{padding:5px 10px;font-size:13px}
+#jn{position:fixed;inset:0;z-index:20}
+#jn .bk{position:absolute;inset:0;background:rgba(0,0,0,.55)}
+#jn aside{position:absolute;background:var(--cd);border:1px solid var(--bd);padding:18px;overflow:auto}
+#jn.lado aside{top:0;right:0;bottom:0;width:min(400px,100%);border-width:0 0 0 1px}
+#jn.centro aside{top:50%;left:50%;transform:translate(-50%,-50%);width:min(420px,92%);max-height:90vh;border-radius:10px}
 #out{position:fixed;inset:0;display:none;flex-direction:column;background:transparent}
 #out iframe{flex:1;min-height:0;width:100%;border:0;background:transparent}
 #lt{flex:none;margin-top:auto;display:flex;align-items:center;gap:2.5em;padding:.9em 2.5em .9em 1.6em;border-top:.8em solid #2d6a4f;font-size:calc(var(--s,1)*1vw);line-height:1.1}
@@ -90,6 +101,7 @@ button.r{border-color:var(--ng);color:var(--ng)}
 <div id="out"><iframe id="fr" allow="autoplay"></iframe><div id="lt"><div class="k"><div class="c" id="cr"></div><div class="f" id="fn"></div></div><div class="n" id="nx"></div></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 const SB_URL='https://lnbunuppttmcrqhxalpp.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxuYnVudXBwdHRtY3JxaHhhbHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyNjI4NDAsImV4cCI6MjEwNzgzODg0MH0.RXTVze45uxDJBn8j9KcuKrgDtPB72nbSGIxanb3bCi8';
@@ -108,6 +120,106 @@ const irLista=d=>{selD=d;const x=new Date(d+'T00:00:00');cur=new Date(x.getFullY
 
 if(P.get('saida'))saida(P.get('saida'));else admin();
 
+function janela(tipo,html){
+  fechar();
+  const d=document.createElement('div');d.id='jn';d.className=tipo;
+  d.innerHTML='<div class="bk"></div><aside>'+html+'</aside>';
+  document.body.appendChild(d);
+  d.querySelector('.bk').onclick=fechar;
+  return d;
+}
+function fechar(){const d=document.getElementById('jn');if(d)d.remove()}
+function painelItem(i,cb){
+  const h=i.tipo==='header';
+  janela('lado',`<h2>${h?'Cabeçalho':'Item'}</h2><label>Nome<input id="dn"></label>${h?'':`<label>Duração (minutos)<input id="dm" type="number" min="0" step="0.5"></label><label>Observações<textarea id="do" rows="9" placeholder="Texto que aparece abaixo do item no PDF"></textarea></label>`}<div class="row"><button class="p" id="ds">Salvar</button><button class="g" id="dc">Fechar</button></div>`);
+  $('#dn').value=i.nome;
+  if(!h){$('#dm').value=i.minutos;$('#do').value=i.notas||''}
+  $('#dn').focus();$('#dn').select();
+  $('#dc').onclick=fechar;
+  $('#ds').onclick=async()=>{
+    const f={nome:$('#dn').value.trim()||i.nome};
+    if(!h){f.minutos=+$('#dm').value||0;f.notas=$('#do').value}
+    const {error}=await sb.from('itens').update(f).eq('id',i.id);
+    if(error){alert(`Não foi possível salvar: ${error.message}\nSe citar "notas", rode no Supabase: alter table itens add column if not exists notas text;`);return}
+    fechar();cb();
+  };
+}
+const fmtD=m=>{const t=Math.round(Number(m)*60);return Math.floor(t/60)+':'+String(t%60).padStart(2,'0')};
+const san=v=>String(v??'').replace(/→/g,'->');
+async function pdfJanela(id){
+  const [a,b]=await Promise.all([sb.from('cultos').select('*').eq('id',id).single(),sb.from('itens').select('*').eq('culto_id',id).order('ordem')]);
+  const c=a.data,it=b.data||[];
+  let o={hor:true,dur:true,obs:true,fs:11};
+  try{Object.assign(o,JSON.parse(localStorage.getItem('pdf-cfg')||'{}'))}catch(e){}
+  janela('centro',`<h2>Baixar PDF</h2><p class="vz">${esc(c.nome)}</p>
+  <label class="ck"><input type="checkbox" id="p1"${o.hor?' checked':''}> Mostrar horários</label>
+  <label class="ck"><input type="checkbox" id="p2"${o.dur?' checked':''}> Mostrar duração (minutos)</label>
+  <label class="ck"><input type="checkbox" id="p3"${o.obs?' checked':''}> Mostrar observações</label>
+  <label>Tamanho da letra<select id="p4">${[10,11,12,14].map(n=>`<option${n==o.fs?' selected':''}>${n}</option>`).join('')}</select></label>
+  <div class="row"><button class="p" id="pb">Baixar PDF</button><button class="g" id="pc">Cancelar</button></div>`);
+  $('#pc').onclick=fechar;
+  $('#pb').onclick=()=>{
+    o={hor:$('#p1').checked,dur:$('#p2').checked,obs:$('#p3').checked,fs:+$('#p4').value};
+    try{localStorage.setItem('pdf-cfg',JSON.stringify(o))}catch(e){}
+    fechar();gerarPDF(c,it,o);
+  };
+}
+function gerarPDF(c,it,o){
+  if(!window.jspdf){alert('Não foi possível carregar o gerador de PDF. Verifique a internet e tente de novo.');return}
+  const doc=new window.jspdf.jsPDF({unit:'mm',format:'a4'});
+  const W=210,H=297,M=15,fs=o.fs,lh=fs*0.3528*1.4;
+  let y=M;
+  const pg=n=>{if(y+n>H-M){doc.addPage();y=M}};
+  doc.setFont('helvetica','bold');doc.setFontSize(24);
+  doc.splitTextToSize(san(c.nome),W-2*M).forEach(l=>{y+=9;doc.text(l,W/2,y,{align:'center'})});
+  y+=4;doc.setLineDashPattern([1,1],0);doc.setLineWidth(.2);doc.setDrawColor(0);doc.line(M,y,W-M,y);doc.setLineDashPattern([],0);
+  y+=8;doc.setFontSize(14);
+  doc.text(new Date(c.data+'T00:00:00').toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'}),W/2,y,{align:'center'});
+  y+=12;
+  const xT=M+2,xD=xT+(o.hor?18:0),xN=xD+(o.dur?18:0),wN=W-M-2-xN;
+  doc.setFontSize(fs);
+  if(o.hor||o.dur){
+    doc.setFont('helvetica','bold');
+    if(o.hor){doc.text(c.data.slice(8)+'/'+c.data.slice(5,7),xT,y);doc.text(c.hora_inicio.slice(0,5),xT,y+lh)}
+    if(o.dur){doc.text('Duração',xD,y);doc.text('em min',xD,y+lh)}
+    y+=lh*2+4;
+  }
+  let m=toMin(c.hora_inicio.slice(0,5)),tot=0;
+  it.forEach(i=>{
+    doc.setFontSize(fs);
+    if(i.tipo==='header'){
+      pg(lh+8);
+      doc.setFillColor(217,225,234);doc.rect(M,y-lh+0.5,W-2*M,lh+2.5,'F');
+      doc.setFont('helvetica','bold');doc.text(san(i.nome).toUpperCase(),xT,y);y+=lh+4;return;
+    }
+    doc.setFont('helvetica','bold');
+    const nm=doc.splitTextToSize(san(i.nome),wN);
+    doc.setFont('helvetica','normal');
+    const nt=o.obs&&i.notas?san(i.notas).split('\n').flatMap(l=>doc.splitTextToSize(l||' ',wN-3)):[];
+    const n=nm.length+nt.length;
+    pg(lh*n+4);
+    doc.setFont('helvetica','normal');
+    if(o.hor)doc.text(hm(m),xT,y);
+    doc.setFont('helvetica','bold');
+    if(o.dur)doc.text(fmtD(i.minutos),xD,y);
+    nm.forEach((l,k)=>doc.text(l,xN,y+k*lh));
+    doc.setFont('helvetica','normal');
+    nt.forEach((l,k)=>doc.text(l,xN+3,y+(nm.length+k)*lh));
+    y+=lh*(n-1)+2.5;
+    doc.setDrawColor(215);doc.setLineWidth(.15);doc.line(M,y,W-M,y);
+    y+=lh*.95;
+    m+=Number(i.minutos);tot+=Number(i.minutos);
+  });
+  pg(lh+4);
+  doc.setDrawColor(0);doc.setLineWidth(.5);doc.line(M,y-lh*.95,W-M,y-lh*.95);
+  doc.setFontSize(fs);doc.setFont('helvetica','normal');
+  if(o.hor)doc.text(hm(m),xT,y);
+  doc.setFont('helvetica','bold');
+  if(o.dur)doc.text(fmtD(tot),xD,y);
+  doc.text('Total',xN,y);
+  const nome=(c.nome+' - '+c.data.split('-').reverse().join('-')).replace(/[\\/:*?"<>|]/g,'');
+  doc.save(nome+'.pdf');
+}
 async function admin(){
   const {data:{session}}=await sb.auth.getSession();
   session?lista():login();
@@ -133,17 +245,26 @@ async function lista(){
     if(k%7===6)cel+='</tr>';
   }
   const dia=cultos.filter(x=>x.data===selD);
-  const li=x=>`<li data-id="${x.id}"><span><b>${esc(x.nome)}</b><small>${x.hora_inicio.slice(0,5)}</small></span><span class="b2"><button class="g" data-a="ed">Editar</button><button class="r" data-a="del">Excluir</button></span></li>`;
+  const li=x=>`<li data-id="${x.id}"><span><b>${esc(x.nome)}</b><small>${x.hora_inicio.slice(0,5)}</small></span><span class="b2"><button class="g" data-a="pdf">PDF</button><button class="g" data-a="ed">Editar</button><button class="r" data-a="del">Excluir</button></span></li>`;
   $('#app').innerHTML=`<header><b>Programação</b><button class="g" id="sair">Sair</button></header><main><div class="grid">
   <div><div class="cal"><div class="hd"><span>${cur.toLocaleDateString('pt-BR',{month:'long',year:'numeric'})}</span><span class="b2"><button class="g" data-m="-1">‹</button><button class="g" data-m="0">•</button><button class="g" data-m="1">›</button></span></div>
   <table><tr>${['DOM','SEG','TER','QUA','QUI','SEX','SÁB'].map(x=>`<th>${x}</th>`).join('')}</tr>${cel}</table></div></div>
-  <div id="col"><div class="row" style="justify-content:space-between;align-items:center"><h2>${selD.split('-').reverse().join('/')}</h2><button class="p" id="nc">Adicionar culto</button></div>
+  <div id="col"><div class="row" style="justify-content:space-between;align-items:center"><h2>${selD.split('-').reverse().join('/')}</h2><button class="p" id="nc">Adicionar</button></div>
   ${dia.length?`<ul class="l">${dia.map(li).join('')}</ul>`:'<p class="vz">Nenhum culto neste dia.</p>'}</div></div></main>`;
   $('#sair').onclick=async()=>{await sb.auth.signOut();login()};
-  $('#nc').onclick=async()=>{
-    const n=prompt('Nome do culto','Culto');if(!n||!n.trim())return;
-    const {data}=await sb.from('cultos').insert({nome:n.trim(),data:selD,hora_inicio:'18:00'}).select().single();
-    if(data)culto(data.id);
+  $('#nc').onclick=()=>{
+    const sug=[...new Set([...cultos.map(x=>x.nome),'Culto','Avisos Gerais','Gestão'])];
+    janela('centro',`<h2>Nova programação</h2><label>Categoria<input id="ct" list="cats" autocomplete="off" placeholder="Ex.: Culto, Avisos Gerais, Gestão"></label><datalist id="cats">${sug.map(x=>`<option value="${esc(x)}">`).join('')}</datalist><div class="chips">${sug.map(x=>`<button class="g" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div><div class="row"><button class="p" id="ok">Criar</button><button class="g" id="no">Cancelar</button></div>`);
+    $('#ct').focus();
+    document.querySelector('#jn .chips').onclick=e=>{if(e.target.dataset.v){$('#ct').value=e.target.dataset.v;$('#ct').focus()}};
+    const criar=async()=>{
+      const n=$('#ct').value.trim();if(!n)return;
+      fechar();
+      const {data}=await sb.from('cultos').insert({nome:n,data:selD,hora_inicio:'18:00'}).select().single();
+      if(data)culto(data.id);
+    };
+    $('#ok').onclick=criar;$('#no').onclick=fechar;
+    $('#ct').onkeydown=e=>{if(e.key==='Enter')criar()};
   };
   document.querySelector('.cal').onclick=e=>{
     const m=e.target.closest('[data-m]');
@@ -152,6 +273,7 @@ async function lista(){
   };
   $('#col').onclick=async e=>{
     const li=e.target.closest('li[data-id]');if(!li)return;
+    if(e.target.dataset.a==='pdf'){pdfJanela(li.dataset.id);return}
     if(e.target.dataset.a==='del'){if(confirm('Excluir este culto e toda a programação?')){await sb.from('cultos').delete().eq('id',li.dataset.id);lista()}return}
     culto(li.dataset.id);
   };
@@ -164,24 +286,24 @@ async function culto(id){
   const tot=it.map((x,k)=>{if(x.tipo!=='header')return 0;let z=0;for(let j=k+1;j<it.length&&it[j].tipo!=='header';j++)z+=Number(it[j].minutos);return z});
   const rows=it.map((i,k)=>{
     const h=i.tipo==='header',t=h?'':hm(m);if(!h)m+=Number(i.minutos);
-    return `<div class="it${h?' h':''}" data-id="${i.id}"><span class="gr">⠿</span><span class="t">${t}</span><input class="nm" value="${esc(i.nome)}">${h?`<span class="t" style="text-align:right">${tot[k]} min</span>`:`<input class="mn" type="number" min="0" step="0.5" value="${i.minutos}">`}<span class="b"><button class="g" data-a="up">↑</button><button class="g" data-a="dn">↓</button><button class="r" data-a="rm">✕</button></span></div>`;
+    return `<div class="it${h?' h':''}" data-id="${i.id}"><span class="gr">⠿</span><span class="t">${t}</span><input class="nm" value="${esc(i.nome)}">${h?`<span class="t" style="text-align:right">${tot[k]} min</span>`:`<input class="mn" type="number" min="0" step="0.5" value="${i.minutos}">`}<span class="b">${h?'':`<button class="${i.notas?'p':'g'}" data-a="ed" title="Observações">✎</button>`}<button class="g" data-a="up">↑</button><button class="g" data-a="dn">↓</button><button class="r" data-a="rm">✕</button></span></div>`;
   }).join('');
-  $('#app').innerHTML=`<header><button class="g" id="vl">Voltar</button><button class="p" id="lv">Painel Live</button></header><main>
+  $('#app').innerHTML=`<header><button class="g" id="vl">Voltar</button><span class="b2"><button class="g" id="pdf">Baixar PDF</button><button class="p" id="lv">Painel ao vivo</button></span></header><main>
   <div class="row"><input id="cn" value="${esc(c.nome)}"><input id="cd2" type="date" value="${c.data}"><input id="ch" type="time" value="${c.hora_inicio.slice(0,5)}"></div>
   <div class="row"><button class="p" id="ac">Adicionar categoria</button></div>
   <div class="pal" id="pm" style="display:${painel?'flex':'none'}"><button id="pi">Item <kbd>i</kbd></button><button id="ph">Cabeçalho <kbd>h</kbd></button></div>
   <div id="its">${rows||'<p class="vz">Sem itens. Adicione um acima.</p>'}</div>
   <p class="tot">Término previsto: ${hm(m)}. Arraste pelo ⠿ ou use as setas para reorganizar.</p>
   <div class="row"><input id="dd" type="date"><button class="g" id="dp">Duplicar para esta data</button></div></main>`;
-  $('#vl').onclick=()=>irLista(c.data);$('#lv').onclick=()=>live(id);
+  $('#vl').onclick=()=>irLista(c.data);$('#lv').onclick=()=>live(id);$('#pdf').onclick=()=>pdfJanela(id);
   $('#cn').onchange=e=>sb.from('cultos').update({nome:e.target.value}).eq('id',id);
   $('#ch').onchange=async e=>{await sb.from('cultos').update({hora_inicio:e.target.value}).eq('id',id);culto(id)};
   $('#cd2').onchange=async e=>{if(e.target.value){await sb.from('cultos').update({data:e.target.value}).eq('id',id);culto(id)}};
   const add=async tipo=>{
     const h=tipo==='header';
-    const {error}=await sb.from('itens').insert({culto_id:id,ordem:it.length?Math.max(...it.map(x=>x.ordem))+1:1,nome:h?'Novo cabeçalho':'Novo item',minutos:h?0:5,tipo});
+    const {data:n,error}=await sb.from('itens').insert({culto_id:id,ordem:it.length?Math.max(...it.map(x=>x.ordem))+1:1,nome:h?'Novo cabeçalho':'Novo item',minutos:h?0:5,tipo}).select().single();
     if(error){alert(`Não foi possível adicionar: ${error.message}\nSe citar "tipo", rode no Supabase: alter table itens add column tipo text not null default 'item';`);return}
-    foco=true;culto(id);
+    if(h){foco=true;culto(id)}else{await culto(id);painelItem(n,()=>culto(id))}
   };
   $('#ac').onclick=()=>{painel=!painel;$('#pm').style.display=painel?'flex':'none'};
   $('#pi').onclick=()=>add('item');$('#ph').onclick=()=>add('header');
@@ -206,6 +328,7 @@ async function culto(id){
   box.onclick=async e=>{
     const a=e.target.dataset.a,r=e.target.closest('.it');if(!a||!r)return;
     const k=it.findIndex(x=>x.id===r.dataset.id);
+    if(a==='ed'){painelItem(it[k],()=>culto(id));return}
     if(a==='rm'){await sb.from('itens').delete().eq('id',r.dataset.id)}
     else{const j=a==='up'?k-1:k+1;if(j<0||j>=it.length)return;const ids=it.map(x=>x.id);[ids[k],ids[j]]=[ids[j],ids[k]];await salvar(ids)}
     culto(id);
