@@ -132,6 +132,9 @@ button:disabled{opacity:.4;cursor:default}
   .it .b{grid-column:1/-1;justify-content:flex-end}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+#fs{position:fixed;top:0;right:0;width:84px;height:84px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;z-index:10}
+#fs:hover{opacity:1}
+#fs button{padding:6px 11px;font-size:16px}
 #out{position:fixed;inset:0;display:none;flex-direction:column;background:transparent}
 #out iframe{flex:1;min-height:0;width:100%;border:0;background:transparent}
 #lt{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;flex:none;margin-top:auto;display:flex;align-items:center;gap:2.5em;padding:.9em 2.5em .9em 1.6em;border-top:.8em solid #2d6a4f;font-size:calc(var(--s,1)*1vw);line-height:1.1}
@@ -144,12 +147,12 @@ button:disabled{opacity:.4;cursor:default}
 #lt .c{font-size:10em;font-weight:300;line-height:1;font-variant-numeric:tabular-nums;color:#2d6a4f;white-space:nowrap}
 #lt .c.neg{color:#d93a25}
 #lt .f{font-size:1.9em;opacity:.7;white-space:nowrap}
-#lt .n{font-size:2.8em;opacity:.7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+#lt .n{font-size:1.9em;opacity:.7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
 </style>
 </head>
 <body>
 <div id="app"></div>
-<div id="out"><iframe id="fr" allow="autoplay"></iframe><div id="lt"><div class="k"><div class="c" id="cr"></div><div class="f" id="fn"></div></div><div class="n" id="nx"></div></div></div>
+<div id="out"><iframe id="fr" allow="autoplay"></iframe><div id="fs" title="Tela cheia (F)"><button class="g" aria-label="Tela cheia">⛶</button></div><div id="lt"><div class="k"><div class="c" id="cr"></div><div class="f" id="fn"></div></div><div class="n" id="nx"></div></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -592,6 +595,9 @@ async function saida(id){
     const n=it[st.idx+1];
     $('#nx').textContent=n?'A seguir: '+n.nome:'Último item';
   }
+  const tela=()=>{if(document.fullscreenElement)document.exitFullscreen();else if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{})};
+  $('#fs').onclick=tela;$('#lt').ondblclick=tela;
+  addEventListener('keydown',e=>{if(e.key==='f'||e.key==='F')tela()});
   await carregar();
   sb.channel('l'+id).on('postgres_changes',{event:'*',schema:'public',table:'live_state',filter:'culto_id=eq.'+id},carregar).subscribe();
   setInterval(carregar,10000);
