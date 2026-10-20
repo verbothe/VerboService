@@ -1,0 +1,12 @@
+name: manter-supabase-ativo
+on:
+  schedule:
+    - cron: '0 12 */3 * *'
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -fsS "https://lnbunuppttmcrqhxalpp.supabase.co/rest/v1/config?select=chave&limit=1" \
+            -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxuYnVudXBwdHRtY3JxaHhhbHBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyNjI4NDAsImV4cCI6MjEwNzgzODg0MH0.RXTVze45uxDJBn8j9KcuKrgDtPB72nbSGIxanb3bCi8"
