@@ -115,6 +115,11 @@ main{max-width:1040px;margin:0 auto;padding:24px}
 #jn.centro aside{top:50%;left:50%;transform:translate(-50%,-50%);width:min(430px,92%);max-height:90vh;border-radius:18px;animation:fade .18s ease}
 @keyframes entra{from{transform:translateX(26px);opacity:0}}
 @keyframes fade{from{opacity:0}}
+button:disabled{opacity:.4;cursor:default}
+.us{display:grid;grid-template-columns:1fr 170px auto;gap:10px;align-items:center;background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:12px 14px;margin-bottom:8px}
+.us.bl{opacity:.7;border-color:rgba(251,113,133,.35)}
+.us small{display:block;color:var(--mu);margin-top:2px}
+@media(max-width:560px){.us{grid-template-columns:1fr}}
 @media(max-width:820px){
   .rail{top:auto;right:0;width:auto;height:60px;flex-direction:row;justify-content:space-around;padding:0 10px;border-right:0;border-top:1px solid var(--bd)}
   .rail .lg,.rail .sp{display:none}
@@ -164,22 +169,26 @@ const ico={
   lista:'<svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
   culto:'<svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></svg>',
   live:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z"/></svg>',
+  usuarios:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 5.3a3.5 3.5 0 0 1 0 6.4M18 14.8c2 .6 3.2 2.3 3.5 5.2"/></svg>',
   sair:'<svg viewBox="0 0 24 24"><path d="M9 4H5.5A1.5 1.5 0 0 0 4 5.5v13A1.5 1.5 0 0 0 5.5 20H9M15 8l4 4-4 4M19 12H9"/></svg>'
 };
-const rail=()=>'<nav class="rail"><div class="lg">V</div>'+[['lista','Programação'],['culto','Cronograma'],['live','Ao vivo']].map(([k,t])=>`<button data-nav="${k}" title="${t}" aria-label="${t}" class="${vista===k?'on':''}"${k!=='lista'&&!atual?' disabled':''}>${ico[k]}</button>`).join('')+`<div class="sp"></div><button data-nav="sair" title="Sair" aria-label="Sair">${ico.sair}</button></nav>`;
+const rail=()=>'<nav class="rail"><div class="lg">V</div>'+[['lista','Programação'],['culto','Cronograma'],['live','Ao vivo']].concat(papel==='admin'?[['usuarios','Usuários']]:[]).map(([k,t])=>`<button data-nav="${k}" title="${t}" aria-label="${t}" class="${vista===k?'on':''}"${k!=='lista'&&k!=='usuarios'&&!atual?' disabled':''}>${ico[k]}</button>`).join('')+`<div class="sp"></div><button data-nav="sair" title="Sair" aria-label="Sair">${ico.sair}</button></nav>`;
 Object.defineProperty(AP,'innerHTML',{get(){return IH.get.call(AP)},set(v){IH.set.call(AP,v.includes('class="box"')?v:rail()+'<div class="pane">'+v+'</div>')}});
 AP.addEventListener('click',async e=>{
   const b=e.target.closest('[data-nav]');if(!b||b.disabled)return;
   const k=b.dataset.nav;
-  if(k==='lista')lista();else if(k==='culto')culto(atual);else if(k==='live')live(atual);
+  if(k==='lista')lista();else if(k==='culto')culto(atual);else if(k==='live')live(atual);else if(k==='usuarios')usuarios();
   else{await sb.auth.signOut();atual=null;papel='operador';login()}
 });
+let bloqueado=false;
 async function carregarPapel(){
-  papel='operador';
+  papel='operador';bloqueado=false;
   try{
     const {data:{user}}=await sb.auth.getUser();if(!user)return;
-    const {data}=await sb.from('perfis').select('papel').eq('user_id',user.id).maybeSingle();
-    if(data&&data.papel==='admin')papel='admin';
+    let r=await sb.from('perfis').select('papel,ativo').eq('user_id',user.id).maybeSingle();
+    if(r.error)r=await sb.from('perfis').select('papel').eq('user_id',user.id).maybeSingle();
+    const d=r.data;
+    if(d){if(d.ativo===false)bloqueado=true;else if(d.papel==='admin')papel='admin'}
   }catch(e){}
 }
 let timer;
@@ -292,7 +301,10 @@ function gerarPDF(c,it,o){
 }
 async function admin(){
   const {data:{session}}=await sb.auth.getSession();
-  if(session){await carregarPapel();lista()}else login();
+  if(!session){login();return}
+  await carregarPapel();
+  if(bloqueado){await sb.auth.signOut();login('Seu acesso foi bloqueado. Fale com um administrador.');return}
+  lista();
 }
 function login(msg=''){
   clearInterval(timer);
@@ -300,6 +312,32 @@ function login(msg=''){
   $('#go').onclick=async()=>{
     const {error}=await sb.auth.signInWithPassword({email:$('#em').value.trim(),password:$('#pw').value});
     error?login(({'Invalid login credentials':'E-mail ou senha incorretos.','Email not confirmed':'E-mail ainda não confirmado no Supabase.'})[error.message]||error.message):admin();
+  };
+}
+async function usuarios(){
+  if(papel!=='admin'){lista();return}
+  vista='usuarios';clearInterval(timer);document.onkeydown=null;
+  const [r,u0]=await Promise.all([sb.from('perfis').select('*').order('email'),sb.auth.getUser()]);
+  const data=r.data||[],eu=u0.data.user;
+  const rows=data.map(u=>{
+    const meu=eu&&u.user_id===eu.id,at=u.ativo!==false;
+    return `<div class="us${at?'':' bl'}" data-id="${u.user_id}"><div><b>${esc(u.email||'(sem e-mail)')}</b><small>${meu?'Você':(at?'Ativo':'Bloqueado')}</small></div><select class="pp"${meu?' disabled':''}><option value="operador"${u.papel==='operador'?' selected':''}>Operador</option><option value="admin"${u.papel==='admin'?' selected':''}>Administrador</option></select><button class="${at?'r':'g'}" data-a="bl"${meu?' disabled':''}>${at?'Bloquear':'Desbloquear'}</button></div>`;
+  }).join('');
+  $('#app').innerHTML=`<header><b>Usuários</b></header><main><p class="vz">Operadores controlam o cronograma. Administradores também gerenciam a saída e os usuários. Usuários bloqueados não conseguem entrar nem alterar nada.</p>${r.error?'<p class="err">Não foi possível carregar a lista. Rode o SQL de usuários no Supabase.</p>':''}<div id="us" style="margin-top:14px">${rows||'<p class="vz">Nenhum usuário encontrado.</p>'}</div><p class="tot">Para criar um novo acesso, adicione o usuário em Authentication, Users, no Supabase. Ele aparece aqui sozinho como Operador.</p></main>`;
+  $('#us').onchange=async e=>{
+    const w=e.target.closest('.us');if(!w||!e.target.classList.contains('pp'))return;
+    const x=await sb.from('perfis').update({papel:e.target.value}).eq('user_id',w.dataset.id);
+    if(x.error)alert('Não foi possível alterar: '+x.error.message);
+    usuarios();
+  };
+  $('#us').onclick=async e=>{
+    if(e.target.dataset.a!=='bl')return;
+    const w=e.target.closest('.us'),u=data.find(z=>z.user_id===w.dataset.id);
+    const at=u.ativo!==false;
+    if(at&&!confirm('Bloquear o acesso de '+(u.email||'este usuário')+'?'))return;
+    const x=await sb.from('perfis').update({ativo:!at}).eq('user_id',u.user_id);
+    if(x.error)alert('Não foi possível alterar: '+x.error.message);
+    usuarios();
   };
 }
 async function lista(){
