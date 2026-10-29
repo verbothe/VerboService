@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Verbo Service</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#F5F2EA">
@@ -200,6 +200,7 @@ main{max-width:1040px;margin:0 auto;padding:24px}
   .prox .ct{font-size:24px}
   .entrada>.box{margin:20px auto 32px}
 }
+@media(max-width:820px){input,select,textarea{font-size:16px}}
 #fs{position:fixed;top:0;right:0;width:84px;height:84px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;z-index:10}
 #fs:hover{opacity:1}
 #fs button{padding:6px 11px;font-size:16px}
@@ -207,16 +208,16 @@ main{max-width:1040px;margin:0 auto;padding:24px}
 #out iframe{flex:1;min-height:0;width:100%;border:0;background:transparent}
 #lt{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;flex:none;margin-top:auto;display:flex;align-items:center;gap:2.5em;padding:.9em 2.5em .9em 1.6em;border-top:.8em solid #6C998A;font-size:calc(var(--s,1)*1vw);line-height:1.1}
 #lt.neg{border-top-color:#D9604A}
-#lt.claro{background:#F5F2EA;color:#172B3A}
-#lt.escuro{background:#172B3A;color:#F5F2EA}
+#lt.claro{background:#fff;color:#111}
+#lt.escuro{background:#000;color:#fff}
 #lt.topo{order:-1;margin-top:0;border-top:0;border-bottom:.8em solid #6C998A}
 #lt.topo.neg{border-bottom-color:#D9604A}
 #lt .k{display:flex;flex-direction:column;align-items:flex-start;gap:.3em}
 #lt .c{font-size:10em;font-weight:300;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
-#lt.escuro .c{color:#D5A95F}
-#lt.claro .c{color:#172B3A}
-#lt.escuro .c.neg{color:#F0836C}
-#lt.claro .c.neg{color:#B4503C}
+#lt.escuro .c{color:#fff}
+#lt.claro .c{color:#111}
+#lt.escuro .c.neg{color:#FF5A4D}
+#lt.claro .c.neg{color:#D93A25}
 #lt .f{font-size:1.9em;opacity:.75;white-space:nowrap}
 #lt .n{font-size:1.9em;opacity:.75;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
 </style>
@@ -277,6 +278,24 @@ let selD=ds(new Date()),cur=new Date();cur.setDate(1);
 let painel=false,foco=false;
 const irLista=d=>{selD=d;const x=new Date(d+'T00:00:00');cur=new Date(x.getFullYear(),x.getMonth(),1);lista()};
 
+(function(){
+  const bloqueia=e=>e.preventDefault();
+  document.addEventListener('gesturestart',bloqueia);
+  document.addEventListener('gesturechange',bloqueia);
+  document.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault()},{passive:false});
+  const vv=window.visualViewport;
+  if(vv){
+    const fixa=()=>{
+      const r=document.querySelector('.rail');if(!r)return;
+      if(vv.scale>1.01&&matchMedia('(max-width:820px)').matches){
+        const h=document.documentElement.clientHeight;
+        r.style.transformOrigin='left bottom';
+        r.style.transform='translate('+vv.offsetLeft+'px,'+(vv.offsetTop+vv.height-h)+'px) scale('+(1/vv.scale)+')';
+      }else r.style.transform='';
+    };
+    vv.addEventListener('resize',fixa);vv.addEventListener('scroll',fixa);
+  }
+})();
 if(P.get('saida'))saida(P.get('saida'));else admin();
 if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
 
