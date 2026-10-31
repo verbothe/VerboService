@@ -88,22 +88,33 @@ main{max-width:1040px;margin:0 auto;padding:24px}
 .pal{display:flex;gap:8px;margin:0 0 14px}
 .pal button{flex:1;display:flex;justify-content:space-between;align-items:center;background:#fff;border-color:var(--bd2);color:var(--tx)}
 .pal kbd{background:var(--s2);border:1px solid var(--bd2);border-radius:6px;padding:1px 7px;font-size:12px;color:var(--mu);font-family:inherit}
-.it{display:grid;grid-template-columns:22px 58px 1fr 84px auto;gap:8px;align-items:center;margin-bottom:8px;background:#fff;border:1px solid var(--bd);border-radius:14px;padding:8px 10px 8px 12px;position:relative;transition:.15s}
-.it::before{content:"";position:absolute;left:-1px;top:10px;bottom:10px;width:3px;border-radius:3px;background:var(--sg)}
-.it:hover{border-color:var(--bd2);box-shadow:0 4px 16px rgba(23,43,58,.06)}
-.it.h{background:var(--s2);border-color:rgba(108,153,138,.45)}
-.it.h::before{background:var(--du)}
-.it.h .nm{font-weight:800;text-transform:uppercase;letter-spacing:.6px;font-size:13px}
+.it{display:grid;grid-template-columns:20px 46px 50px 1fr auto;gap:8px;align-items:start;margin-bottom:4px;background:#fff;border:1px solid var(--bd);border-radius:10px;padding:7px 8px 7px 6px;position:relative;cursor:pointer;transition:.15s}
+.it:hover{border-color:var(--bd2);background:#fbfaf6}
+.it.h{grid-template-columns:20px 1fr auto auto;align-items:center;background:var(--s2);border-color:rgba(108,153,138,.45);padding:5px 8px 5px 6px}
+.it.h::before{content:"";position:absolute;left:-1px;top:6px;bottom:6px;width:3px;border-radius:3px;background:var(--du)}
+.it .hn{font-size:12.5px;text-transform:uppercase;letter-spacing:.6px;font-weight:800}
+.it .ht{font-size:12px;color:var(--mu);font-weight:600}
 .it.dg{z-index:3;border-color:var(--sg);opacity:.92;box-shadow:0 10px 30px rgba(23,43,58,.2)}
-.it.ov{box-shadow:0 -4px 0 var(--du)}
-.it .gr{cursor:grab;touch-action:none;text-align:center;color:var(--mu);user-select:none;font-size:18px}
-.it .t{font-variant-numeric:tabular-nums;font-weight:700;color:var(--tx);font-size:14px}
-.it input{background:transparent;border-color:transparent;padding:8px}
-.it input:hover{border-color:var(--bd2)}
-.it input:focus{background:#fff}
-.it .mn{text-align:center;font-variant-numeric:tabular-nums}
-.it .b{display:flex;gap:4px}
-.it .b button{padding:6px 9px;font-size:13px;border-radius:9px}
+.it.ov{box-shadow:0 -3px 0 var(--du)}
+.it .gr{cursor:grab;touch-action:none;text-align:center;color:var(--mu);user-select:none;font-size:15px;line-height:1.5}
+.it .t{font-variant-numeric:tabular-nums;font-size:13px;color:var(--mu);font-weight:600;line-height:1.5}
+.it .ln{font-variant-numeric:tabular-nums;font-size:13px;font-weight:700;line-height:1.5}
+.it .bd b{font-size:14px;font-weight:700;line-height:1.5}
+.it .ds{font-size:12.5px;color:var(--mu);white-space:pre-wrap;line-height:1.4;margin-top:1px}
+.it .b{display:flex;gap:3px;opacity:0;transition:.15s}
+.it:hover .b,.it:focus-within .b{opacity:1}
+@media(hover:none){.it .b{opacity:1}}
+.it .b button{padding:1px 7px;font-size:12px;border-radius:7px;line-height:1.5}
+.addw{position:relative;display:inline-block;margin:2px 0 12px}
+.addp{position:absolute;z-index:8;top:calc(100% + 6px);left:0;width:min(300px,86vw);background:#fff;border:1px solid var(--bd2);border-radius:14px;box-shadow:0 14px 40px rgba(23,43,58,.18);padding:12px}
+.addp .pt{text-align:center;font-weight:700;font-size:13px;margin-bottom:10px}
+.pe{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--bd2);border-radius:10px;margin-bottom:8px;cursor:grab;touch-action:none;user-select:none;font-weight:600;font-size:14px;background:#fff}
+.pe:last-child{margin-bottom:0}
+.pe span:nth-child(2){flex:1}
+.pe .pg{color:var(--mu)}
+.pe kbd{background:var(--s2);border:1px solid var(--bd2);border-radius:6px;padding:1px 7px;font-size:12px;color:var(--mu);font-family:inherit}
+.pe.gh{position:fixed;z-index:60;pointer-events:none;width:210px;box-shadow:0 12px 30px rgba(23,43,58,.25);opacity:.95}
+.tt{flex:1;min-width:0;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .agora{position:relative;background:var(--az);color:var(--bg);border-radius:18px;padding:20px 22px;margin-bottom:16px;box-shadow:0 14px 40px rgba(23,43,58,.28);overflow:hidden}
 .agora::after{content:"";position:absolute;right:-80px;top:-80px;width:260px;height:260px;border-radius:50%;border:1px solid rgba(255,255,255,.07);box-shadow:0 0 0 40px rgba(255,255,255,.03);pointer-events:none}
 .agora .lb{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--sg);font-weight:700}
@@ -144,8 +155,10 @@ main{max-width:1040px;margin:0 auto;padding:24px}
   header{padding:10px 14px}main{padding:16px 14px}
 }
 @media(max-width:560px){
-  .it{grid-template-columns:20px 46px 1fr 62px}
+  .it{grid-template-columns:20px 42px 46px 1fr}
   .it .b{grid-column:1/-1;justify-content:flex-end}
+  .it.h{grid-template-columns:20px 1fr auto auto}
+  .it.h .b{grid-column:auto}
   .us{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -256,6 +269,7 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 AP.addEventListener('click',async e=>{
   const b=e.target.closest('[data-nav]');if(!b||b.disabled)return;
   const k=b.dataset.nav;
+  if(window.flushNome)await window.flushNome();
   if(k==='lista')lista();else if(k==='culto')culto(atual);else if(k==='live')live(atual);else if(k==='usuarios')usuarios();
   else{await sb.auth.signOut();atual=null;papel='operador';login()}
 });
@@ -310,7 +324,7 @@ function janela(tipo,html){
 function fechar(){const d=document.getElementById('jn');if(d)d.remove()}
 function painelItem(i,cb){
   const h=i.tipo==='header';
-  janela('lado',`<h2>${h?'Cabeçalho':'Item'}</h2><label>Nome<input id="dn"></label>${h?'':`<label>Duração (minutos)<input id="dm" type="number" min="0" step="0.5"></label><label>Observações<textarea id="do" rows="9" placeholder="Texto que aparece abaixo do item no PDF"></textarea></label>`}<div class="row"><button class="p" id="ds">Salvar</button><button class="g" id="dc">Fechar</button></div>`);
+  janela('lado',`<h2>${h?'Cabeçalho':'Item'}</h2><label>Título<input id="dn"></label>${h?'':`<label>Duração (minutos)<input id="dm" type="number" min="0" step="0.5"></label><label>Descrição<textarea id="do" rows="9" placeholder="Detalhes deste momento. Aparecem abaixo do título na lista e no PDF"></textarea></label>`}<div class="row"><button class="p" id="ds">Salvar</button><button class="g" id="dc">Fechar</button></div>`);
   $('#dn').value=i.nome;
   if(!h){$('#dm').value=i.minutos;$('#do').value=i.notas||''}
   $('#dn').focus();$('#dn').select();
@@ -333,7 +347,7 @@ async function pdfJanela(id){
   janela('centro',`<h2>Baixar PDF</h2><p class="vz">${esc(c.nome)}</p>
   <label class="ck"><input type="checkbox" id="p1"${o.hor?' checked':''}> Mostrar horários</label>
   <label class="ck"><input type="checkbox" id="p2"${o.dur?' checked':''}> Mostrar duração (minutos)</label>
-  <label class="ck"><input type="checkbox" id="p3"${o.obs?' checked':''}> Mostrar observações</label>
+  <label class="ck"><input type="checkbox" id="p3"${o.obs?' checked':''}> Mostrar descrições</label>
   <label>Tamanho da letra<select id="p4">${[10,11,12,14].map(n=>`<option${n==o.fs?' selected':''}>${n}</option>`).join('')}</select></label>
   <div class="row"><button class="p" id="pb">Baixar PDF</button><button class="g" id="pc">Cancelar</button></div>`);
   $('#pc').onclick=fechar;
@@ -579,51 +593,88 @@ async function culto(id){
   const c=a.data,it=b.data||[];
   let m=toMin(c.hora_inicio.slice(0,5));
   const tot=it.map((x,k)=>{if(x.tipo!=='header')return 0;let z=0;for(let j=k+1;j<it.length&&it[j].tipo!=='header';j++)z+=Number(it[j].minutos);return z});
+  const acts='<span class="b"><button class="g" data-a="up" title="Subir">↑</button><button class="g" data-a="dn" title="Descer">↓</button><button class="r" data-a="rm" title="Excluir">✕</button></span>';
   const rows=it.map((i,k)=>{
     const h=i.tipo==='header',t=h?'':hm(m);if(!h)m+=Number(i.minutos);
-    return `<div class="it${h?' h':''}" data-id="${i.id}"><span class="gr">⠿</span><span class="t">${t}</span><input class="nm" value="${esc(i.nome)}">${h?`<span class="t" style="text-align:right">${tot[k]} min</span>`:`<input class="mn" type="number" min="0" step="0.5" value="${i.minutos}">`}<span class="b">${h?'':`<button class="${i.notas?'p':'g'}" data-a="ed" title="Observações">✎</button>`}<button class="g" data-a="up">↑</button><button class="g" data-a="dn">↓</button><button class="r" data-a="rm">✕</button></span></div>`;
+    if(h)return `<div class="it h" data-id="${i.id}"><span class="gr">⠿</span><b class="hn">${esc(i.nome)}</b><span class="ht">${tot[k]} min</span>${acts}</div>`;
+    return `<div class="it" data-id="${i.id}"><span class="gr">⠿</span><span class="t">${t}</span><span class="ln">${fmtD(i.minutos)}</span><div class="bd"><b>${esc(i.nome)}</b>${i.notas?`<div class="ds">${esc(i.notas)}</div>`:''}</div>${acts}</div>`;
   }).join('');
-  $('#app').innerHTML=`<header><button class="g" id="vl">Voltar</button><span class="b2"><button class="g" id="pdf">Baixar PDF</button><button class="p" id="lv">Painel ao vivo</button></span></header><main>
-  <div class="row"><input id="cn" value="${esc(c.nome)}"><input id="cd2" type="date" value="${c.data}"><input id="ch" type="time" value="${c.hora_inicio.slice(0,5)}"></div>
-  <div class="row"><button class="p" id="ac">Adicionar categoria</button></div>
-  <div class="pal" id="pm" style="display:${painel?'flex':'none'}"><button id="pi">Item <kbd>i</kbd></button><button id="ph">Cabeçalho <kbd>h</kbd></button></div>
-  <div id="its">${rows||'<p class="vz">Sem itens. Adicione um acima.</p>'}</div>
-  <p class="tot">Término previsto: ${hm(m)}. Arraste pelo ⠿ ou use as setas para reorganizar.</p>
+  $('#app').innerHTML=`<header><button class="g" id="vl">Voltar</button><b class="tt" id="tt">${esc(c.nome)}</b><span class="b2"><button class="g" id="pdf">PDF</button><button class="p" id="lv">Painel ao vivo</button></span></header><main>
+  <div class="row"><input id="cn" value="${esc(c.nome)}" placeholder="Título do evento" aria-label="Título do evento"><input id="cd2" type="date" value="${c.data}"><input id="ch" type="time" value="${c.hora_inicio.slice(0,5)}"></div>
+  <div class="addw"><button class="p" id="ac">Add <span>▾</span></button><div class="addp" id="pm" style="display:${painel?'block':'none'}"><div class="pt">Arraste ou clique</div><div class="pe" data-t="item"><span class="pg">⠿</span><span>Item</span><kbd>i</kbd></div><div class="pe" data-t="header"><span class="pg">⠿</span><span>Cabeçalho</span><kbd>h</kbd></div></div></div>
+  <div id="its">${rows||'<p class="vz">Sem itens. Use o Add para criar o primeiro.</p>'}</div>
+  <p class="tot">Término previsto: ${hm(m)}. Arraste pelo ⠿ para reorganizar e toque em um item para editar.</p>
   <div class="row"><input id="dd" type="date"><button class="g" id="dp">Duplicar para esta data</button></div></main>`;
-  $('#vl').onclick=()=>irLista(c.data);$('#lv').onclick=()=>live(id);$('#pdf').onclick=()=>pdfJanela(id);
-  $('#cn').onchange=e=>sb.from('cultos').update({nome:e.target.value}).eq('id',id);
-  $('#ch').onchange=async e=>{await sb.from('cultos').update({hora_inicio:e.target.value}).eq('id',id);culto(id)};
-  $('#cd2').onchange=async e=>{if(e.target.value){await sb.from('cultos').update({data:e.target.value}).eq('id',id);culto(id)}};
-  const add=async tipo=>{
+  let nomeSalvo=c.nome,tn=null;
+  const salvarNome=async()=>{
+    clearTimeout(tn);
+    const el=document.getElementById('cn');if(!el)return;
+    const v=el.value.trim();
+    if(!v||v===nomeSalvo)return;
+    const {error}=await sb.from('cultos').update({nome:v}).eq('id',id);
+    if(error){alert('Não foi possível salvar o título: '+error.message);return}
+    nomeSalvo=v;
+  };
+  window.flushNome=salvarNome;
+  $('#cn').oninput=e=>{$('#tt').textContent=e.target.value;clearTimeout(tn);tn=setTimeout(salvarNome,500)};
+  $('#cn').onchange=salvarNome;$('#cn').onblur=salvarNome;
+  $('#vl').onclick=async()=>{await salvarNome();irLista(c.data)};
+  $('#lv').onclick=async()=>{await salvarNome();live(id)};
+  $('#pdf').onclick=async()=>{await salvarNome();pdfJanela(id)};
+  $('#ch').onchange=async e=>{await salvarNome();await sb.from('cultos').update({hora_inicio:e.target.value}).eq('id',id);culto(id)};
+  $('#cd2').onchange=async e=>{if(e.target.value){await salvarNome();await sb.from('cultos').update({data:e.target.value}).eq('id',id);culto(id)}};
+  const salvar=ids=>Promise.all(ids.map((x,k)=>{const o=it.find(y=>y.id===x);return o&&o.ordem===k+1?0:sb.from('itens').update({ordem:k+1}).eq('id',x)}));
+  const add=async(tipo,pos=null)=>{
     const h=tipo==='header';
     const {data:n,error}=await sb.from('itens').insert({culto_id:id,ordem:it.length?Math.max(...it.map(x=>x.ordem))+1:1,nome:h?'Novo cabeçalho':'Novo item',minutos:h?0:5,tipo}).select().single();
     if(error){alert(`Não foi possível adicionar: ${error.message}\nSe citar "tipo", rode no Supabase: alter table itens add column tipo text not null default 'item';`);return}
-    if(h){foco=true;culto(id)}else{await culto(id);painelItem(n,()=>culto(id))}
+    if(pos!==null&&pos<it.length){const ids=it.map(x=>x.id);ids.splice(pos,0,n.id);await salvar(ids)}
+    await culto(id);
+    painelItem(n,()=>culto(id));
   };
-  $('#ac').onclick=()=>{painel=!painel;$('#pm').style.display=painel?'flex':'none'};
-  $('#pi').onclick=()=>add('item');$('#ph').onclick=()=>add('header');
-  if(foco){foco=false;const n=[...document.querySelectorAll('.nm')].pop();if(n){n.focus();n.select()}}
+  $('#ac').onclick=()=>{painel=!painel;$('#pm').style.display=painel?'block':'none'};
+  document.onpointerdown=e=>{if(painel&&!e.target.closest('.addw')){painel=false;const q=document.getElementById('pm');if(q)q.style.display='none'}};
   document.onkeydown=e=>{
     if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)||e.ctrlKey||e.metaKey||e.altKey)return;
     if(e.key==='i')add('item');else if(e.key==='h')add('header');
   };
+  const box=$('#its');
+  $('#pm').onpointerdown=e=>{
+    const pe=e.target.closest('.pe');if(!pe)return;
+    e.preventDefault();
+    const tipo=pe.dataset.t,x0=e.clientX,y0=e.clientY;
+    let arrastou=false,gh=null,to=0;
+    const linhas=()=>[...box.querySelectorAll('.it')];
+    const mv=ev=>{
+      if(!arrastou&&Math.hypot(ev.clientX-x0,ev.clientY-y0)>6){arrastou=true;gh=pe.cloneNode(true);gh.classList.add('gh');document.body.appendChild(gh)}
+      if(!arrastou)return;
+      gh.style.left=(ev.clientX+12)+'px';gh.style.top=(ev.clientY+12)+'px';
+      const rs=linhas();rs.forEach(r=>r.classList.remove('ov'));
+      to=rs.findIndex(r=>ev.clientY<r.getBoundingClientRect().top+r.offsetHeight/2);
+      if(to<0)to=rs.length;
+      if(rs[to])rs[to].classList.add('ov');
+    };
+    const up=ev=>{
+      removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up);
+      if(gh)gh.remove();
+      linhas().forEach(r=>r.classList.remove('ov'));
+      if(!arrastou){add(tipo);return}
+      const br=box.getBoundingClientRect();
+      const dentro=ev.clientY>=br.top-24&&ev.clientY<=br.bottom+24&&ev.clientX>=br.left-24&&ev.clientX<=br.right+24;
+      if(dentro)add(tipo,to);
+    };
+    addEventListener('pointermove',mv);addEventListener('pointerup',up);addEventListener('pointercancel',up);
+  };
   $('#dp').onclick=async()=>{
     const d=$('#dd').value;if(!d){alert('Escolha a data.');return}
     const {data:n}=await sb.from('cultos').insert({nome:c.nome,data:d,hora_inicio:c.hora_inicio,tipo_id:c.tipo_id}).select().single();
-    if(n&&it.length)await sb.from('itens').insert(it.map(x=>({culto_id:n.id,ordem:x.ordem,nome:x.nome,minutos:x.minutos,tipo:x.tipo||'item'})));
+    if(n&&it.length)await sb.from('itens').insert(it.map(x=>({culto_id:n.id,ordem:x.ordem,nome:x.nome,minutos:x.minutos,tipo:x.tipo||'item',notas:x.notas||null})));
     if(n)culto(n.id);
   };
-  const box=$('#its');
-  box.onchange=async e=>{
-    const r=e.target.closest('.it');if(!r)return;
-    if(e.target.classList.contains('nm')){await sb.from('itens').update({nome:e.target.value}).eq('id',r.dataset.id)}
-    else{await sb.from('itens').update({minutos:+e.target.value||0}).eq('id',r.dataset.id);culto(id)}
-  };
-  const salvar=ids=>Promise.all(ids.map((x,k)=>{const o=it.find(y=>y.id===x);return o.ordem===k+1?0:sb.from('itens').update({ordem:k+1}).eq('id',x)}));
   box.onclick=async e=>{
-    const a=e.target.dataset.a,r=e.target.closest('.it');if(!a||!r)return;
-    const k=it.findIndex(x=>x.id===r.dataset.id);
-    if(a==='ed'){painelItem(it[k],()=>culto(id));return}
+    const r=e.target.closest('.it');if(!r||e.target.closest('.gr'))return;
+    const a=e.target.dataset.a,k=it.findIndex(x=>x.id===r.dataset.id);
+    if(!a){painelItem(it[k],()=>culto(id));return}
     if(a==='rm'){await sb.from('itens').delete().eq('id',r.dataset.id)}
     else{const j=a==='up'?k-1:k+1;if(j<0||j>=it.length)return;const ids=it.map(x=>x.id);[ids[k],ids[j]]=[ids[j],ids[k]];await salvar(ids)}
     culto(id);
