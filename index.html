@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<script>try{if(localStorage.getItem("tema-app")==="escuro"&&!/[?&]saida=/.test(location.search))document.documentElement.dataset.tema="escuro"}catch(e){}</script>
+<script>try{if(localStorage.getItem("tema-app")==="escuro"&&!/[?&]saida=/.test(location.search)){document.documentElement.dataset.tema="escuro";var m=document.querySelector('meta[name=theme-color]');if(m)m.content="#0E1A24"}}catch(e){}</script>
 <title>Verbo Service</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#F5F2EA">
@@ -224,6 +224,8 @@ main{max-width:1040px;margin:0 auto;padding:24px}
 html[data-tema=escuro]{--bg:#0E1A24;--s1:#172B3A;--s2:#1F3649;--bd:rgba(245,242,234,.10);--bd2:rgba(245,242,234,.18);--tx:#F5F2EA;--mu:#9FB1BD;--sg2:#8FC1AF;--ng:#F0836C;color-scheme:dark}
 [data-tema=escuro] :where(.box,.card,.cal,.l li,.it,.pl li,.us,.addp,.pe){background:var(--s1)}
 [data-tema=escuro] #jn aside{background:var(--s1)}
+[data-tema=escuro] .l li,[data-tema=escuro] .pl li{background:var(--s1)}
+[data-tema=escuro] .l li:hover{background:var(--s2)}
 [data-tema=escuro] input,[data-tema=escuro] select,[data-tema=escuro] textarea{background:#0F1D29}
 [data-tema=escuro] input::placeholder,[data-tema=escuro] textarea::placeholder{color:#6f8290}
 [data-tema=escuro] label{color:#b8c6cf}
