@@ -1002,15 +1002,20 @@ async function live(id){
     $('#hu').value=fundo;
     const fim=()=>'?saida='+id+'&pos='+$('#ps').value;
     const copia=t=>{$('#lk').textContent=t;navigator.clipboard&&navigator.clipboard.writeText(t).catch(()=>{})};
-    $('#c1').onclick=()=>copia(location.href.split('?')[0]+fim());
-    $('#c2').onclick=()=>copia(fim());
-    $('#sf').onclick=async()=>{
+    let salvo=fundo;
+    const salvarFundo=async()=>{
       let u=$('#hu').value.trim();
       if(u&&!/^https?:\/\//i.test(u))u='http://'+u;
+      $('#hu').value=u;
+      if(u===salvo)return true;
       const r=await sb.from('config').upsert({chave:'fundo',valor:u});
-      if(r.error){$('#lk').textContent='Não foi possível salvar o fundo. Rode o SQL de perfis e config no Supabase.';return}
-      $('#hu').value=u;$('#lk').textContent='Fundo salvo. A tela de projeção usa esse link ao ser recarregada.';
+      if(r.error){$('#lk').textContent='Não foi possível salvar o fundo: '+r.error.message;return false}
+      salvo=u;$('#lk').textContent='Fundo salvo. A tela de projeção usa esse link ao ser recarregada.';
+      return true;
     };
+    $('#c1').onclick=async()=>{if(await salvarFundo())copia(location.href.split('?')[0]+fim())};
+    $('#c2').onclick=async()=>{if(await salvarFundo())copia(fim())};
+    $('#sf').onclick=async()=>{if(await salvarFundo()&&$('#hu').value===salvo)$('#lk').textContent='Fundo salvo: '+salvo+'. Recarregue a tela de projeção.'};
   }
   function draw(){
     const i=it[st.idx],rem=i?i.minutos*60-(st.t0?(Date.now()-st.t0)/1000:0):0;
