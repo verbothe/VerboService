@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <script>try{if(localStorage.getItem("tema-app")==="escuro"&&!/[?&]saida=/.test(location.search)){document.documentElement.dataset.tema="escuro";var m=document.querySelector('meta[name=theme-color]');if(m)m.content="#0E1A24"}}catch(e){}</script>
-<title>Verbo Service</title>
+<title>Verbo Service (teste)</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#F5F2EA">
 <meta name="mobile-web-app-capable" content="yes">
@@ -284,6 +284,54 @@ html,body{touch-action:pan-x pan-y}
 #sino{padding:7px 9px}
 #sino svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block}
 #sino.on{color:var(--du);border-color:var(--du)}
+.sel{padding:6px 10px;border-radius:999px;font-weight:700;font-size:12.5px;white-space:nowrap}
+.sel.at{background:#F7E1DA;color:#8F3A28}
+.sel.ad,.sel.ok{background:#E3ECE6;color:#2F5D4E}
+.prv{display:flex;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.14);font-size:13px;color:#A9B7BF}
+.prv b{color:#F5F2EA}
+.prv b.at{color:#FF6F61}
+.prv b.ad{color:#43D17E}
+.seg2{display:inline-flex;padding:3px;gap:2px;border-radius:10px;background:var(--s2);border:1px solid var(--bd);margin:0 0 12px}
+.seg2 button{border:0;background:transparent;padding:6px 16px;font-size:13px;border-radius:8px;color:var(--mu)}
+.seg2 button.on{background:#fff;color:var(--tx);box-shadow:0 1px 4px rgba(23,43,58,.12)}
+#grd{display:none}
+main[data-m=grade] #grd{display:block}
+main[data-m=grade] .addw,main[data-m=grade] #its,main[data-m=grade]>.tot,main[data-m=grade] .dup{display:none}
+.gcab,.gl,.gf{display:grid;grid-template-columns:1fr 52px 52px 38px;gap:6px;align-items:center}
+.gcab{padding:0 12px;font-size:11px;font-weight:700;letter-spacing:.8px;color:var(--mu);margin-bottom:6px}
+.gcab span+span,.gl .pv,.gl .rl,.gf .pv,.gf .rl{text-align:center}
+.gl{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:9px 12px;margin-bottom:6px;font-size:14px}
+.gl.now{background:#E3ECE6;border-color:var(--sg)}
+.gl .pv,.gf .pv{color:var(--mu);font-size:13px}
+.gl .rl,.gf .rl{font-weight:700;font-size:13px}
+.gl .rl.pj{font-style:italic;font-weight:500;color:var(--mu)}
+.dl{font-size:12px;font-weight:700;text-align:right}
+.dl.at{color:#8F3A28}
+.dl.ad{color:#2F5D4E}
+.gh{font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mu);padding:8px 4px 4px}
+.gf{border-top:2px solid var(--tx);padding:10px 12px 0;margin-top:6px;font-size:14px}
+.gnota{color:var(--mu);font-size:12.5px;margin:10px 0 0}
+.hs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 10px}
+.hk{background:#172B3A;color:#F5F2EA;border-radius:14px;padding:12px}
+.hk small{display:block;font-size:11px;letter-spacing:1px;font-weight:700;color:#8FC1AF}
+.hk b{display:block;font-family:Manrope,sans-serif;font-weight:800;font-size:24px;color:#D5A95F}
+.hk b.at{color:#FF6F61}
+.hk b.ad{color:#43D17E}
+.hk span{font-size:12px;color:#A9B7BF}
+.hc{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.hc .t1{display:flex;justify-content:space-between;font-size:14px}
+.hc .t1 em{font-style:normal;font-weight:700}
+.hc .hb{height:6px;border-radius:3px;background:rgba(23,43,58,.1);margin-top:8px}
+.hc .hb i{display:block;height:6px;border-radius:3px}
+.hc .t2{display:flex;justify-content:space-between;font-size:12px;color:var(--mu);margin-top:6px}
+.prox.cp.ceye{padding-right:56px}
+.prox.cp .eye{position:absolute;top:10px;right:10px;width:34px;height:34px;padding:0;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);color:#F5F2EA}
+.prox.cp .eye svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+[data-tema=escuro] .gl,[data-tema=escuro] .hc{background:var(--s1)}
+[data-tema=escuro] .gl.now{background:rgba(108,153,138,.22)}
+[data-tema=escuro] .seg2 button.on{background:var(--s1)}
+[data-tema=escuro] .dl.at{color:#FF8F7A}
+[data-tema=escuro] .dl.ad{color:#8FD9AE}
 #out{position:fixed;inset:0;display:none;flex-direction:column;background:transparent}
 #out iframe{flex:1;min-height:0;width:100%;border:0;background:transparent}
 #lt{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;flex:none;margin-top:auto;display:flex;align-items:center;gap:2.5em;padding:.9em 2.5em .9em 1.6em;border-top:.8em solid #6C998A;font-size:calc(var(--s,1)*1vw);line-height:1.1}
@@ -325,10 +373,12 @@ const ico={
   lista:'<svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
   culto:'<svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></svg>',
   live:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z"/></svg>',
+  acomp:'<svg viewBox="0 0 24 24"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  hist:'<svg viewBox="0 0 24 24"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1M3.5 4.5v4h4"/><path d="M12 7.5V12l3 2"/></svg>',
   usuarios:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 5.3a3.5 3.5 0 0 1 0 6.4M18 14.8c2 .6 3.2 2.3 3.5 5.2"/></svg>',
   sair:'<svg viewBox="0 0 24 24"><path d="M9 4H5.5A1.5 1.5 0 0 0 4 5.5v13A1.5 1.5 0 0 0 5.5 20H9M15 8l4 4-4 4M19 12H9"/></svg>'
 };
-const rail=()=>'<nav class="rail"><div class="lg"><img src="icon-192.png" alt="Verbo Service"></div>'+[['lista','Programação'],['culto','Cronograma'],['live','Ao vivo']].concat(papel==='admin'?[['usuarios','Usuários']]:[]).map(([k,t])=>`<button data-nav="${k}" title="${t}" aria-label="${t}" class="${vista===k?'on':''}"${k!=='lista'&&k!=='usuarios'&&!atual?' disabled':''}>${ico[k]}</button>`).join('')+`<div class="sp"></div><button data-nav="sair" title="Sair" aria-label="Sair">${ico.sair}</button></nav>`;
+const rail=()=>'<nav class="rail"><div class="lg"><img src="icon-192.png" alt="Verbo Service"></div>'+[['lista','Programação'],['culto','Cronograma'],['live','Ao vivo'],['acomp','Acompanhar']].concat(papel==='admin'?[['hist','Histórico'],['usuarios','Usuários']]:[]).map(([k,t])=>`<button data-nav="${k}" title="${t}" aria-label="${t}" class="${vista===k?'on':''}"${!['lista','usuarios','hist'].includes(k)&&!atual?' disabled':''}>${ico[k]}</button>`).join('')+`<div class="sp"></div><button data-nav="sair" title="Sair" aria-label="Sair">${ico.sair}</button></nav>`;
 Object.defineProperty(AP,'innerHTML',{get(){return IH.get.call(AP)},set(v){
   document.body.classList.remove('ld');
   if(v.includes('class="box"')){IH.set.call(AP,v)}
@@ -343,15 +393,15 @@ Object.defineProperty(AP,'innerHTML',{get(){return IH.get.call(AP)},set(v){
     pane.innerHTML=v;
     if(ultVista!==vista){ultVista=vista;window.scrollTo(0,0)}
   }
-  if(vista!=='live'&&wl){wl.release().catch(()=>{});wl=null}
+  if(vista!=='live'&&vista!=='acomp'&&wl){wl.release().catch(()=>{});wl=null}
 }});
 async function manterTela(){try{if('wakeLock' in navigator&&!wl){wl=await navigator.wakeLock.request('screen');wl.addEventListener('release',()=>{wl=null})}}catch(e){}}
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&(vista==='live'||emSaida))manterTela()});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&(vista==='live'||vista==='acomp'||emSaida))manterTela()});
 AP.addEventListener('click',async e=>{
   const b=e.target.closest('[data-nav]');if(!b||b.disabled)return;
   const k=b.dataset.nav;
   if(window.flushNome)await window.flushNome();
-  if(k==='lista')lista();else if(k==='culto')culto(atual);else if(k==='live')live(atual);else if(k==='usuarios')usuarios();
+  if(k==='lista')lista();else if(k==='culto')culto(atual);else if(k==='live')live(atual);else if(k==='usuarios')usuarios();else if(k==='acomp')acompanhar(atual);else if(k==='hist')historicoLista();
   else{await sb.auth.signOut();atual=null;papel='operador';meuId=null;epAtual=null;login()}
 });
 let bloqueado=false;
@@ -376,7 +426,7 @@ function aplicarTema(t){
 if(!P.get('saida'))aplicarTema(temaApp);
 const ICO_LUA='<svg viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>';
 const ICO_SOL='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
-let timer,tld=null,preLista=null,ultVista='',assinaturaLista='',canalLista=null;
+let timer,tld=null,preLista=null,ultVista='',assinaturaLista='',canalLista=null,modoCulto='lista',canalAc=null;
 const sigCultos=l=>JSON.stringify((l||[]).map(x=>[x.id,x.nome,x.data,x.hora_inicio]));
 async function checarLista(){
   if(vista!=='lista'||document.hidden||document.getElementById('jn'))return;
@@ -708,6 +758,8 @@ function preencherProximo(al,l){
   al.innerHTML='<div class="tx"><span class="lb">'+(andamento?'Acontecendo agora':'Próximo culto')+'</span><b></b><span class="qd"></span></div><div class="ct"></div>';
   al.querySelector('b').textContent=c.nome;
   al.querySelector('.qd').textContent=dia+' às '+c.hora_inicio.slice(0,5);
+  al.classList.toggle('ceye',!!c.id);
+  if(c.id)al.insertAdjacentHTML('beforeend','<button class="eye" title="Acompanhar (somente visualização)" aria-label="Acompanhar">'+'<svg viewBox="0 0 24 24"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>'+'</button>');
   const ct=al.querySelector('.ct');
   if(andamento){ct.textContent='Em andamento';ct.classList.add('ag');return}
   const p2=n=>String(n).padStart(2,'0');
@@ -779,6 +831,134 @@ function login(msg='',ok=false){
   if(matchMedia('(min-width:821px)').matches)$('#em').focus();
   proximoCulto();
 }
+const hhmm=ms=>new Date(ms).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+const baseMs=c=>new Date(c.data+'T'+c.hora_inicio.slice(0,5)+':00').getTime();
+const somaMin=l=>l.reduce((x,y)=>x+Number(y.minutos),0);
+const mmss=sec=>{const a=Math.abs(Math.round(sec));return Math.floor(a/60)+':'+String(a%60).padStart(2,'0')};
+const sinal=n=>(n>0?'+':n<0?'-':'')+Math.abs(n);
+const lerSt=d=>d?{idx:d.idx,t0:d.t0?new Date(d.t0).getTime():null}:{idx:0,t0:null};
+
+/* tempo no painel ao vivo e na visualização: cronômetro, selo de atraso e previsão de término */
+function pintarAgora(c,it,st,editando){
+  const i=it[st.idx],rem=i?i.minutos*60-(st.t0?(Date.now()-st.t0)/1000:0):0;
+  const cd=$('#cd');
+  if(!editando)cd.textContent=i?(rem<0?'-':'')+fmt(rem):'';
+  cd.className='cd'+(rem<0?' neg':'');
+  $('#cur').textContent=i?i.nome:'Sem itens';
+  $('#nxt').textContent=it[st.idx+1]?'A seguir: '+it[st.idx+1].nome:(i?'Último item':'');
+  document.querySelectorAll('.pl li').forEach((li,k)=>li.classList.toggle('on',k===st.idx));
+  const plan=baseMs(c)+somaMin(it)*60000,pv2=$('#pv2'),sel=$('#sel');
+  $('#pv1').textContent='Término previsto '+hhmm(plan);
+  if(st.t0&&i&&c.data===ds(new Date())){
+    const seg=somaMin(it.slice(st.idx+1))*60;
+    const fimMs=Date.now()+(Math.max(rem,0)+seg)*1000,dl=Math.round((fimMs-plan)/60000);
+    pv2.textContent='Agora prevê '+hhmm(fimMs);pv2.className=dl>0?'at':dl<0?'ad':'';
+    if(sel){sel.hidden=false;sel.className='sel '+(dl>0?'at':dl<0?'ad':'ok');sel.textContent=dl>0?'Atrasado '+dl+' min':dl<0?'Adiantado '+(-dl)+' min':'No horário'}
+  }else{pv2.textContent='';pv2.className='';if(sel)sel.hidden=true}
+}
+
+/* grade: previsto e real lado a lado */
+function gradeHTML(c,all,st,ev){
+  const itens=all.filter(x=>x.tipo!=='header'),base=baseMs(c);
+  let cum=0;const prev={};
+  itens.forEach(i=>{prev[i.id]=base+cum*60000;cum+=Number(i.minutos)});
+  const fimPrev=base+cum*60000,real={},proj={};
+  ev.forEach(e=>{if(e.item_id&&real[e.item_id]===undefined)real[e.item_id]=new Date(e.em).getTime()});
+  const cur=itens[st.idx];
+  if(st.t0&&cur&&real[cur.id]===undefined)real[cur.id]=st.t0;
+  let fimReal=null;
+  if(st.t0&&cur){
+    let cs=Math.max(st.t0+Number(cur.minutos)*60000,Date.now());
+    for(let j=st.idx+1;j<itens.length;j++){proj[itens[j].id]=cs;cs+=Number(itens[j].minutos)*60000}
+    fimReal=cs;
+  }
+  let h='<div class="gcab"><span>ITEM</span><span>PREV.</span><span>REAL</span><span>MIN</span></div>';
+  all.forEach(i=>{
+    if(i.tipo==='header'){h+='<div class="gh">'+esc(i.nome)+'</div>';return}
+    const p=prev[i.id],r=real[i.id],pj=proj[i.id],v=r!==undefined?r:pj;
+    const dn=v!==undefined?Math.round((v-p)/60000):null;
+    const agora=st.t0&&cur&&i.id===cur.id;
+    h+='<div class="gl'+(agora?' now':'')+'"><b>'+esc(i.nome)+'</b><span class="pv">'+hhmm(p)+'</span><span class="rl'+(r===undefined&&pj!==undefined?' pj':'')+'">'+(v!==undefined?hhmm(v):'—')+'</span><span class="dl'+(dn>0?' at':dn<0?' ad':'')+'">'+(dn===null?'':sinal(dn))+'</span></div>';
+  });
+  const dt=fimReal!==null?Math.round((fimReal-fimPrev)/60000):null;
+  h+='<div class="gf"><b>Término</b><span class="pv">'+hhmm(fimPrev)+'</span><span class="rl">'+(fimReal!==null?hhmm(fimReal):'—')+'</span><span class="dl'+(dt>0?' at':dt<0?' ad':'')+'">'+(dt===null?'':sinal(dt))+'</span></div>';
+  h+='<p class="gnota">REAL em itálico é previsão, recalculada conforme o culto anda. Sem horário real, o item ainda não começou ou não houve registro.</p>';
+  return h;
+}
+
+/* visualização: o mesmo tempo do painel ao vivo, sem controles */
+async function acompanhar(id){
+  vista='acomp';atual=id;manterTela();ocupado();clearInterval(timer);document.onkeydown=null;
+  const [a,b,s]=await Promise.all([sb.from('cultos').select('*').eq('id',id).single(),sb.from('itens').select('*').eq('culto_id',id).order('ordem'),sb.from('live_state').select('*').eq('culto_id',id).maybeSingle()]);
+  const c=a.data,it=(b.data||[]).filter(x=>x.tipo!=='header');
+  let st=lerSt(s.data);
+  $('#app').innerHTML=`<header><button class="g" id="vl">Voltar</button><b class="tt">${esc(c.nome)}</b><span class="sel" id="sel" hidden></span></header><main>
+  <section class="agora"><span class="lb">Agora</span><p class="cur" id="cur"></p><div class="cd" id="cd" style="cursor:default"></div><p class="nxt" id="nxt"></p>
+  <div class="prv"><span id="pv1"></span><b id="pv2"></b></div>
+  <p class="tot" style="margin:10px 0 0">Somente visualização. O tempo acompanha o painel ao vivo.</p></section>
+  <ul class="pl">${it.map(i=>`<li><span>${esc(i.nome)}</span><span>${i.minutos} min</span></li>`).join('')}</ul></main>`;
+  $('#vl').onclick=()=>irLista(c.data);
+  const recarregar=async()=>{const r=await sb.from('live_state').select('*').eq('culto_id',id).maybeSingle();st=lerSt(r.data)};
+  if(canalAc)sb.removeChannel(canalAc);
+  canalAc=sb.channel('ac-'+id).on('postgres_changes',{event:'*',schema:'public',table:'live_state',filter:'culto_id=eq.'+id},()=>{if(vista==='acomp')recarregar()}).subscribe();
+  let n=0;pintarAgora(c,it,st,false);
+  timer=setInterval(()=>{pintarAgora(c,it,st,false);if(++n%32===0)recarregar()},250);
+}
+
+/* histórico (só administradores) */
+function calcHist(all,ev){
+  const dur={},ini={};let ini0=null,fim0=null,aberto=false;
+  for(let k=0;k<ev.length;k++){
+    const e=ev[k],t=new Date(e.em).getTime(),nx=ev[k+1];
+    if(e.item_id){
+      if(ini[e.item_id]===undefined)ini[e.item_id]=t;
+      if(ini0===null)ini0=t;
+      if(nx)dur[e.item_id]=(dur[e.item_id]||0)+(new Date(nx.em).getTime()-t);else aberto=true;
+    }else if(ini0!==null)fim0=t;
+  }
+  return {dur,ini,ini0,fim0,aberto};
+}
+async function historicoLista(){
+  if(papel!=='admin'){lista();return}
+  vista='hist';ocupado();clearInterval(timer);document.onkeydown=null;
+  const r=await sb.from('eventos_culto').select('culto_id,em').order('em',{ascending:false}).limit(1000);
+  const ids=[...new Set((r.data||[]).map(x=>x.culto_id))].slice(0,40);
+  let cultos=[];
+  if(ids.length){const q=await sb.from('cultos').select('id,nome,data,hora_inicio').in('id',ids);cultos=(q.data||[]).sort((x,y)=>(y.data+y.hora_inicio).localeCompare(x.data+x.hora_inicio))}
+  $('#app').innerHTML=`<header><b>Histórico</b></header><main>
+  <p class="vz">Cultos com horários reais registrados pelo painel ao vivo.</p>
+  ${r.error?'<p class="err">Não foi possível carregar. Rode o SQL do histórico no Supabase.</p>':''}
+  <ul class="l" id="hl" style="margin-top:14px">${cultos.map(x=>`<li data-id="${x.id}"><span><b>${esc(x.nome)}</b><small>${x.data.split('-').reverse().join('/')} às ${x.hora_inicio.slice(0,5)}</small></span><span class="b2"><button class="g">Ver</button></span></li>`).join('')||(r.error?'':'<li class="vz">Ainda não há registros. Eles começam quando um culto é conduzido pelo painel ao vivo.</li>')}</ul></main>`;
+  $('#hl').onclick=e=>{const li=e.target.closest('li[data-id]');if(li)historico(li.dataset.id)};
+}
+async function historico(id){
+  if(papel!=='admin'){lista();return}
+  vista='hist';ocupado();clearInterval(timer);document.onkeydown=null;
+  const [a,b,e]=await Promise.all([sb.from('cultos').select('*').eq('id',id).single(),sb.from('itens').select('*').eq('culto_id',id).order('ordem'),sb.from('eventos_culto').select('item_id,em').eq('culto_id',id).order('em')]);
+  const c=a.data,all=b.data||[],itens=all.filter(x=>x.tipo!=='header'),H=calcHist(all,e.data||[]);
+  const base=baseMs(c),fimPrev=base+somaMin(itens)*60000;
+  let maior=null,maiorV=0;
+  const escala=Math.max(1,...itens.map(i=>Math.max(Number(i.minutos)*60000,H.dur[i.id]||0)));
+  const linhas=itens.map(i=>{
+    const pl=Number(i.minutos)*60000,rd=H.dur[i.id];
+    if(rd!==undefined&&rd-pl>maiorV){maiorV=rd-pl;maior=i}
+    const d=rd!==undefined?(rd-pl)/1000:null,over=d!==null&&d>0;
+    return `<div class="hc"><div class="t1"><b>${esc(i.nome)}</b><em style="color:${d===null?'var(--mu)':over?'#B4503C':'#3F6F5F'}">${d===null?'sem registro':(d>=0?'+':'-')+mmss(d)}</em></div>
+    <div class="hb"><i style="width:${pl/escala*100}%;background:#172B3A;opacity:.35"></i></div>
+    <div class="hb" style="margin-top:4px"><i style="width:${(rd||0)/escala*100}%;background:${over?'#B4503C':'#6C998A'}"></i></div>
+    <div class="t2"><span>Previsto ${mmss(pl/1000)}</span><span>Real ${rd!==undefined?mmss(rd/1000):'—'}</span></div></div>`;
+  }).join('');
+  const atraso=H.fim0!==null?Math.round((H.fim0-fimPrev)/1000):null;
+  $('#app').innerHTML=`<header><button class="g" id="vl">Voltar</button><b class="tt">Histórico</b></header><main>
+  <div><b style="font-family:Manrope,sans-serif;font-weight:800;font-size:18px">${esc(c.nome)}</b><div class="vz">${c.data.split('-').reverse().join('/')}</div></div>
+  ${e.error?'<p class="err">Não foi possível carregar. Rode o SQL do histórico no Supabase.</p>':''}
+  ${H.ini0===null?'<p class="vz">Este culto ainda não tem horários reais registrados.</p>':`<div class="hs">
+  <div class="hk"><small>TÉRMINO REAL</small><b>${H.fim0!==null?hhmm(H.fim0):'—'}</b><span>previsto ${hhmm(fimPrev)}</span></div>
+  <div class="hk"><small>ATRASO TOTAL</small><b class="${atraso>0?'at':atraso<0?'ad':''}">${atraso===null?'—':(atraso>=0?'+':'-')+mmss(atraso)}</b><span>${maior?'maior: '+esc(maior.nome)+' +'+mmss(maiorV/1000):'sem estouros'}</span></div></div>
+  <p class="vz" style="margin:0 0 10px">Início real ${hhmm(H.ini0)} (previsto ${hhmm(base)})${H.aberto?'. Há um item sem término registrado.':''}</p>${linhas}
+  <p class="tot">Barra escura: previsto. Barra colorida: real.</p>`}</main>`;
+  $('#vl').onclick=historicoLista;
+}
 async function usuarios(){
   if(papel!=='admin'){lista();return}
   vista='usuarios';ocupado();clearInterval(timer);document.onkeydown=null;
@@ -838,7 +1018,7 @@ async function lista(){
   pintaTm();
   $('#tm').onclick=()=>{temaApp=temaApp==='escuro'?'claro':'escuro';try{localStorage.setItem('tema-app',temaApp)}catch(e){}aplicarTema(temaApp);pintaTm()};
   preencherProximo($('#prox'),cultos);
-  $('#prox').onclick=()=>{const i=$('#prox').dataset.id;if(i)culto(i)};
+  $('#prox').onclick=e=>{const i=$('#prox').dataset.id;if(!i)return;if(e.target.closest('.eye'))acompanhar(i);else culto(i)};
   clearInterval(timer);timer=setInterval(checarLista,20000);
   if(!canalLista)canalLista=sb.channel('cultos-lista').on('postgres_changes',{event:'*',schema:'public',table:'cultos'},()=>checarLista()).subscribe();
   $('#nc').onclick=()=>{
@@ -879,12 +1059,14 @@ async function culto(id){
     if(h)return `<div class="it h" data-id="${i.id}"><span class="gr">⠿</span><b class="hn">${esc(i.nome)}</b><span class="ht">${tot[k]} min</span>${acts}</div>`;
     return `<div class="it" data-id="${i.id}"><span class="gr">⠿</span><span class="t">${t}</span><span class="ln">${fmtD(i.minutos)}</span><div class="bd"><b>${esc(i.nome)}</b>${i.notas?`<div class="ds">${esc(i.notas)}</div>`:''}</div>${acts}</div>`;
   }).join('');
-  $('#app').innerHTML=`<header><button class="g" id="vl">Voltar</button><b class="tt" id="tt">${esc(c.nome)}</b><span class="b2"><button class="g" id="pdf">PDF</button><button class="p" id="lv">Painel ao vivo</button></span></header><main>
+  $('#app').innerHTML=`<header><button class="g" id="vl">Voltar</button><b class="tt" id="tt">${esc(c.nome)}</b><span class="b2"><button class="g" id="pdf">PDF</button><button class="p" id="lv">Painel ao vivo</button></span></header><main data-m="${modoCulto}">
   <div class="row"><input id="cn" value="${esc(c.nome)}" placeholder="Título do evento" aria-label="Título do evento"><input id="cd2" type="date" value="${c.data}"><input id="ch" type="time" value="${c.hora_inicio.slice(0,5)}"></div>
+  <div class="seg2" role="group" aria-label="Modo de exibição"><button data-m="lista"${modoCulto==="lista"?' class="on"':''}>Lista</button><button data-m="grade"${modoCulto==="grade"?' class="on"':''}>Grade</button></div>
   <div class="addw"><button class="p" id="ac">Add <span>▾</span></button><div class="addp" id="pm" style="display:${painel?'block':'none'}"><div class="pt">Arraste ou clique</div><div class="pe" data-t="item"><span class="pg">⠿</span><span>Item</span><kbd>i</kbd></div><div class="pe" data-t="header"><span class="pg">⠿</span><span>Cabeçalho</span><kbd>h</kbd></div></div></div>
   <div id="its">${rows||'<p class="vz">Sem itens. Use o Add para criar o primeiro.</p>'}</div>
+  <div id="grd"></div>
   <p class="tot">Término previsto: ${hm(m)}. Arraste pelo ⠿ para reorganizar e toque em um item para editar.</p>
-  <div class="row"><input id="dd" type="date"><button class="g" id="dp">Duplicar para esta data</button></div></main>`;
+  <div class="row dup"><input id="dd" type="date"><button class="g" id="dp">Duplicar para esta data</button></div></main>`;
   let nomeSalvo=c.nome,tn=null;
   const salvarNome=async()=>{
     clearTimeout(tn);
@@ -918,6 +1100,18 @@ async function culto(id){
     if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)||e.ctrlKey||e.metaKey||e.altKey)return;
     if(e.key==='i')add('item');else if(e.key==='h')add('header');
   };
+  const atualizarGrade=async()=>{
+    const el=document.getElementById('grd');if(!el)return;
+    const [s1,e1]=await Promise.all([sb.from('live_state').select('*').eq('culto_id',id).maybeSingle(),sb.from('eventos_culto').select('item_id,em').eq('culto_id',id).order('em')]);
+    const el2=document.getElementById('grd');if(el2)el2.innerHTML=gradeHTML(c,it,lerSt(s1.data),e1.data||[]);
+  };
+  document.querySelectorAll('.seg2 button').forEach(b=>b.onclick=()=>{
+    modoCulto=b.dataset.m;document.querySelector('main').dataset.m=modoCulto;
+    document.querySelectorAll('.seg2 button').forEach(x=>x.classList.toggle('on',x===b));
+    if(modoCulto==='grade')atualizarGrade();
+  });
+  if(modoCulto==='grade')atualizarGrade();
+  timer=setInterval(()=>{if(modoCulto==='grade'&&!document.getElementById('jn'))atualizarGrade()},10000);
   const box=$('#its');
   $('#pm').onpointerdown=e=>{
     const pe=e.target.closest('.pe');if(!pe)return;
@@ -989,9 +1183,10 @@ async function live(id){
   const adm=papel==='admin';
   let fundo='';
   if(adm){try{const r=await cfgP;fundo=(r.data&&r.data.valor)||''}catch(e){}}
-  $('#app').innerHTML=`<header><button class="g" id="vl">Voltar</button><b class="tt">${esc(c.nome)}</b></header><main>
+  $('#app').innerHTML=`<header><button class="g" id="vl">Voltar</button><b class="tt">${esc(c.nome)}</b><span class="sel" id="sel" hidden></span></header><main>
   <section class="agora"><span class="lb">Agora</span><p class="cur" id="cur"></p><div class="cd" id="cd"></div><p class="nxt" id="nxt"></p>
   <div class="ctl"><button class="g" id="ant">‹ Voltar</button><button class="g" id="ini">Iniciar</button><button class="p" id="prx">Próximo ›</button><button class="g" id="zer">Zerar</button></div>
+  <div class="prv"><span id="pv1"></span><b id="pv2"></b></div>
   <p class="tot" style="margin:10px 0 0">Toque duas vezes no tempo para ajustar.</p></section>
   <ul class="pl">${it.map(i=>`<li><span>${esc(i.nome)}</span><span>${i.minutos} min</span></li>`).join('')}</ul>
   ${adm?`<section class="card"><h2>Saída</h2>
@@ -1026,21 +1221,20 @@ async function live(id){
     $('#c2').onclick=async()=>{if(await salvarFundo())copia(fim())};
     $('#sf').onclick=async()=>{if(await salvarFundo()&&$('#hu').value===salvo)$('#lk').textContent='Fundo salvo: '+salvo+'. Recarregue a tela de projeção.'};
   }
-  function draw(){
-    const i=it[st.idx],rem=i?i.minutos*60-(st.t0?(Date.now()-st.t0)/1000:0):0;
-    if(!edit)$('#cd').textContent=i?(rem<0?'-':'')+fmt(rem):'';
-    $('#cd').className='cd'+(rem<0?' neg':'');
-    $('#cur').textContent=i?i.nome:'Sem itens';
-    $('#nxt').textContent=it[st.idx+1]?'A seguir: '+it[st.idx+1].nome:(i?'Último item':'');
-    document.querySelectorAll('.pl li').forEach((li,k)=>li.classList.toggle('on',k===st.idx));
-  }
-  async function set(idx,t0){
+  let ultLog;
+  const logEv=async itemId=>{if(ultLog===itemId)return;ultLog=itemId;try{await sb.from('eventos_culto').insert({culto_id:id,item_id:itemId})}catch(e){}};
+  function draw(){pintarAgora(c,it,st,edit)}
+  async function set(idx,t0,log=true){
     st={idx,t0};draw();
+    if(log)logEv(t0&&it[idx]?it[idx].id:null);
     await sb.from('live_state').upsert({culto_id:id,idx,t0:t0?new Date(t0).toISOString():null,updated_at:new Date().toISOString()});
   }
   $('#vl').onclick=()=>culto(id);
   $('#ini').onclick=()=>set(st.idx,Date.now());
-  $('#prx').onclick=()=>set(Math.min(it.length-1,st.idx+1),Date.now());
+  $('#prx').onclick=()=>{
+    if(st.t0&&st.idx>=it.length-1){logEv(null);set(st.idx,Date.now(),false)}
+    else set(Math.min(it.length-1,st.idx+1),Date.now());
+  };
   $('#ant').onclick=()=>set(Math.max(0,st.idx-1),Date.now());
   $('#zer').onclick=()=>set(0,null);
   function editar(){
@@ -1116,7 +1310,7 @@ async function saida(id){
       const seg=it.slice(st.idx+1).reduce((x,y)=>x+Number(y.minutos),0)*60;
       fimTxt=new Date(Date.now()+(Math.max(rem,0)+seg)*1000).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
     }
-    $('#fn').textContent=fimTxt?'serviço finaliza às '+fimTxt:'';
+    $('#fn').textContent=fimTxt?'serviço finaliza às '+fimTxt+((st.t0&&fim&&fimTxt!==fim)?' (previsto '+fim+')':''):'';
     const n=it[st.idx+1];
     $('#nx').textContent=n?'A seguir: '+n.nome:'Último item';
   }
